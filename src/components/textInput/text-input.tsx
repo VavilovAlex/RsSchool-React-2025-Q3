@@ -1,16 +1,23 @@
-import React, { Component } from "react";
+import { type ChangeEventHandler, Component } from "react";
+import type BaseComponentProps from "../../interfaces/base-component-props.ts";
+import { clsx } from "clsx";
 
-interface TextInputProps {
-  onChange?: (string) => void;
+interface TextInputProps extends BaseComponentProps {
+  onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 class TextInput extends Component<TextInputProps> {
   render() {
+    const { onChange, style, className } = this.props;
+
+    const baseClassName = "p-2 border rounded";
+
     return (
       <input
         type={"text"}
-        className={"p-2 border rounded"}
-        onChange={this.props.onChange}
+        style={style}
+        className={clsx(baseClassName, className)}
+        onChange={onChange}
       />
     );
   }
