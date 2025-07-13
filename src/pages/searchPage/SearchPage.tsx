@@ -25,8 +25,8 @@ export default class SearchPage extends Component {
     const { response } = this.state;
 
     return (
-      <div className={"flex flex-col w-full h-full p-4 items-center"}>
-        <div className={"max-w-[1200px] w-full flex flex-col gap-4"}>
+      <div className={"flex flex-col items-center w-full h-full p-4"}>
+        <div className={"flex flex-col gap-4 max-w-[1200px] w-full"}>
           <Section title={"Search"}>
             <ApiSearch
               onSearchStart={this.handleSearchStart}
