@@ -3,6 +3,7 @@ import type { PaginationOptions } from "../../shared/types/pagination.ts";
 import { fromApiResponse } from "./mappers.ts";
 import type { BookSearchResponse } from "./models.ts";
 import { toQueryParams } from "../../shared/utils/queryParams.ts";
+import { HttpError } from "../../shared/errors/httpError.ts";
 
 export async function searchBooks(
   query: string,
@@ -26,7 +27,10 @@ export async function searchBooks(
 
   if (!response.ok) {
     const body = await response.text();
-    throw new Error(`HTTP error! status: ${response.status}: ${body}`);
+    throw new HttpError(
+      response,
+      `searchBooks failed with status ${response.status}: ${body}`,
+    );
   }
 
   const searchResponse = (await response.json()) as ApiBookSearchResponse;
