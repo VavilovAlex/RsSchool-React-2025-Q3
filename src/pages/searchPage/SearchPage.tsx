@@ -17,6 +17,10 @@ export default class SearchPage extends Component {
     this.setState({ response });
   };
 
+  handleSearchStart = () => {
+    this.setState({ response: null });
+  };
+
   render() {
     const { response } = this.state;
 
@@ -24,7 +28,10 @@ export default class SearchPage extends Component {
       <div className={"flex flex-col w-full h-full p-4 items-center"}>
         <div className={"max-w-[1200px] w-full flex flex-col gap-4"}>
           <Section title={"Search"}>
-            <ApiSearch onSearchSuccess={this.handleSearchSuccess} />
+            <ApiSearch
+              onSearchStart={this.handleSearchStart}
+              onSearchSuccess={this.handleSearchSuccess}
+            />
           </Section>
           <Section title={"Results"}>
             <ApiResults result={response} />

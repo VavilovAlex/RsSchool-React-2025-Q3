@@ -7,6 +7,7 @@ import type { BookSearchResponse } from "../../../api/book/models.ts";
 
 interface Props {
   onSearchSuccess: (response: BookSearchResponse) => void;
+  onSearchStart: () => void;
 }
 
 interface State {
@@ -23,6 +24,10 @@ export default class ApiSearch extends Component<Props> {
     },
   };
 
+  componentDidMount() {
+    this.search().catch(console.error);
+  }
+
   handleSearchTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
@@ -32,6 +37,8 @@ export default class ApiSearch extends Component<Props> {
 
   search = async () => {
     const { searchText, pagination } = this.state;
+
+    this.props.onSearchStart();
 
     const result = await searchBooks(searchText, pagination);
 
