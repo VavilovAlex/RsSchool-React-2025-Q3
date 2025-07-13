@@ -8,7 +8,7 @@ interface State {
   response: BookSearchResponse | null;
 }
 
-export default class SearchPage extends Component {
+export default class SearchPage extends Component<object, State> {
   state: State = {
     response: null,
   };

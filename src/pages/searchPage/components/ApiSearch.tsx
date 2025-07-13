@@ -15,7 +15,7 @@ interface State {
   pagination: PaginationOptions;
 }
 
-export default class ApiSearch extends Component<Props> {
+export default class ApiSearch extends Component<Props, State> {
   state: State = {
     searchText: localStorage.getItem("apiSearchText") || "",
     pagination: {

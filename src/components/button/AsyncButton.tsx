@@ -10,7 +10,7 @@ interface AsyncButtonProps
   onClick?: (e: MouseEvent<HTMLButtonElement>) => Promise<unknown>;
 }
 
-class AsyncButton extends Component<AsyncButtonProps> {
+class AsyncButton extends Component<AsyncButtonProps, State> {
   state: State = {
     isLoading: false,
   };
