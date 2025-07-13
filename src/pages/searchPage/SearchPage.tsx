@@ -4,10 +4,12 @@ import ApiResults from "./components/ApiResults.tsx";
 import Section from "./components/Section.tsx";
 import type { BookSearchResponse } from "../../api/book/models.ts";
 import Button from "../../components/button/Button.tsx";
+import type { HttpError } from "../../shared/errors/httpError.ts";
 
 interface State {
   response: BookSearchResponse | null;
   errorToThrow: Error | null;
+  searchError?: Error | null;
 }
 
 export default class SearchPage extends Component<object, State> {
@@ -17,11 +19,15 @@ export default class SearchPage extends Component<object, State> {
   };
 
   handleSearchSuccess = (response: BookSearchResponse) => {
-    this.setState({ response });
+    this.setState({ response, searchError: null });
   };
 
   handleSearchStart = () => {
     this.setState({ response: null });
+  };
+
+  handleSearchError = (error: Error) => {
+    this.setState({ searchError: error });
   };
 
   throw = () => {
@@ -29,9 +35,11 @@ export default class SearchPage extends Component<object, State> {
   };
 
   render() {
-    const { response } = this.state;
+    const { response, searchError } = this.state;
 
     if (this.state.errorToThrow != null) throw this.state.errorToThrow;
+
+    const httpError = searchError as HttpError;
 
     return (
       <div className={"flex flex-col items-center w-full h-full p-4"}>
@@ -40,8 +48,14 @@ export default class SearchPage extends Component<object, State> {
             <ApiSearch
               onSearchStart={this.handleSearchStart}
               onSearchSuccess={this.handleSearchSuccess}
+              onSearchError={this.handleSearchError}
             />
           </Section>
+          {searchError && (
+            <Section title={"Search error"}>
+              Search failed with code: {httpError.statusCode}
+            </Section>
+          )}
           <Section title={"Results"}>
             <ApiResults result={response} />
           </Section>

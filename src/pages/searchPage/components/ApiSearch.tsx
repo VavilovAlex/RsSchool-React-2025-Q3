@@ -8,11 +8,13 @@ import type { BookSearchResponse } from "../../../api/book/models.ts";
 interface Props {
   onSearchSuccess: (response: BookSearchResponse) => void;
   onSearchStart: () => void;
+  onSearchError: (error: Error) => void;
 }
 
 interface State {
   searchText: string;
   pagination: PaginationOptions;
+  error?: Error | null;
 }
 
 export default class ApiSearch extends Component<Props, State> {
@@ -40,9 +42,13 @@ export default class ApiSearch extends Component<Props, State> {
 
     this.props.onSearchStart();
 
-    const result = await searchBooks(searchText, pagination);
-
-    this.props.onSearchSuccess(result);
+    try {
+      const result = await searchBooks(searchText, pagination);
+      this.props.onSearchSuccess(result);
+    } catch (e) {
+      console.error(e);
+      this.props.onSearchError(e as Error);
+    }
   };
 
   render() {
