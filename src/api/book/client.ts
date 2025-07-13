@@ -13,9 +13,10 @@ export async function searchBooks(
   };
 
   const queryParams: ApiBookSearchQuery = {
-    q: query,
+    q: query == "" ? "*" : query,
     page: pagination.page,
     limit: pagination.pageSize,
+    sort: "rating desc",
   };
 
   const response = await fetch(

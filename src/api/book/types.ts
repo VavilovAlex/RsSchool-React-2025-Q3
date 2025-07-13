@@ -4,6 +4,7 @@ export interface ApiBookSearchQuery extends QueryParams {
   q: string;
   page: number;
   limit: number;
+  sort: string;
 }
 
 export interface ApiBookSearchResponse {
