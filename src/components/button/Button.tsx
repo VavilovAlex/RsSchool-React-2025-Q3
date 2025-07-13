@@ -3,13 +3,13 @@ import { clsx } from "clsx";
 
 class Button extends Component<ButtonHTMLAttributes<HTMLButtonElement>> {
   render() {
-    const { children, className, ...rest } = this.props;
+    const { children, className: propsClassName, ...rest } = this.props;
 
-    const baseClassName =
-      "text-white bg-blue-500 p-2 rounded cursor-pointer hover:bg-blue-600 active:bg-blue-700";
+    const className =
+      "text-white bg-blue-500 p-2 rounded cursor-pointer hover:bg-blue-600 active:bg-blue-700 disabled:bg-blue-200 disabled:cursor-not-allowed";
 
     return (
-      <button className={clsx(baseClassName, className)} {...rest}>
+      <button className={clsx(propsClassName, className)} {...rest}>
         {children}
       </button>
     );
