@@ -4,20 +4,22 @@ import { clsx } from "clsx";
 
 interface TextInputProps extends BaseComponentProps {
   onChange?: ChangeEventHandler<HTMLInputElement>;
+  value?: string;
 }
 
 class TextInput extends Component<TextInputProps> {
   render() {
-    const { onChange, style, className } = this.props;
+    const { value = "", onChange, className, ...rest } = this.props;
 
     const baseClassName = "p-2 border rounded";
 
     return (
       <input
         type={"text"}
-        style={style}
         className={clsx(baseClassName, className)}
+        value={value}
         onChange={onChange}
+        {...rest}
       />
     );
   }
