@@ -27,7 +27,10 @@ export default class SearchPage extends Component<object, State> {
   };
 
   handleSearchError = (error: Error) => {
-    this.setState({ searchError: error });
+    this.setState({
+      searchError: error,
+      response: { numFound: 0, start: 0, books: [] },
+    });
   };
 
   throw = () => {
@@ -52,7 +55,7 @@ export default class SearchPage extends Component<object, State> {
             />
           </Section>
           {searchError && (
-            <Section title={"Search error"}>
+            <Section title={"Search error"} className={"bg-red-100"}>
               Search failed with code: {httpError.statusCode}
             </Section>
           )}
