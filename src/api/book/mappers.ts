@@ -22,6 +22,7 @@ export function fromApiBook(book: ApiBookDocument): Book {
   }
 
   return {
+    key: book.key,
     firstPublishYear: book.first_publish_year,
     title: book.title,
     authors: authors,

@@ -5,6 +5,7 @@ export interface BookSearchResponse {
 }
 
 export interface Book {
+  key: string;
   firstPublishYear: number;
   title: string;
   authors: Author[];
