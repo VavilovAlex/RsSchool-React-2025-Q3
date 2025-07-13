@@ -32,11 +32,11 @@ export default class ApiSearch extends Component<Props> {
     const value = e.target.value;
 
     this.setState({ searchText: value });
-    localStorage.setItem("apiSearchText", value);
   };
 
   search = async () => {
     const { searchText, pagination } = this.state;
+    localStorage.setItem("apiSearchText", searchText);
 
     this.props.onSearchStart();
 
