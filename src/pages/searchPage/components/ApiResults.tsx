@@ -1,5 +1,7 @@
 import { Component } from "react";
 import type { BookSearchResponse } from "../../../api/book/models.ts";
+import Spinner from "../../../components/spinner/Spinner.tsx";
+import Link from "../../../components/link/Link.tsx";
 
 interface Props {
   result: BookSearchResponse | null;
@@ -23,15 +25,17 @@ class ApiResults extends Component<Props> {
           <tbody>
             {result == null ? (
               <tr>
-                <td colSpan={4} className={"italic"}>
-                  Search results will appear here
+                <td colSpan={4}>
+                  <div className={"flex justify-center items-center mt-4"}>
+                    <Spinner />
+                  </div>
                 </td>
               </tr>
             ) : (
               <>
                 {result.books.length === 0 && (
                   <tr>
-                    <td colSpan={2} className={"italic"}>
+                    <td colSpan={4} className={"italic"}>
                       No results found.
                     </td>
                   </tr>
@@ -44,16 +48,12 @@ class ApiResults extends Component<Props> {
                       {book.authors.map((author) => author.name).join(", ")}
                     </td>
                     <td>
-                      <a
+                      <Link
                         href={"https://openlibrary.org/" + book.key}
                         target={"_blank"}
-                        rel="noreferrer"
-                        className={
-                          "text-blue-500 hover:underline cursor-pointer hover:text-blue-700 active:text-blue-900 visited:text-purple-600"
-                        }
                       >
                         Link
-                      </a>
+                      </Link>
                     </td>
                   </tr>
                 ))}
