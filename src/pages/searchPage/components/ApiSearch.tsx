@@ -38,12 +38,17 @@ export default class ApiSearch extends Component<Props, State> {
 
   search = async () => {
     const { searchText, pagination } = this.state;
-    localStorage.setItem("apiSearchText", searchText);
+
+    const normalizedSearchText = searchText.trim();
+
+    this.setState({ searchText: normalizedSearchText });
+
+    localStorage.setItem("apiSearchText", normalizedSearchText);
 
     this.props.onSearchStart();
 
     try {
-      const result = await searchBooks(searchText, pagination);
+      const result = await searchBooks(normalizedSearchText, pagination);
       this.props.onSearchSuccess(result);
     } catch (e) {
       console.error(e);
