@@ -15,7 +15,9 @@ class Section extends Component<SectionProps> {
 
     return (
       <div className={clsx(className, propClassName)}>
-        <div className={"text-2xl mb-2"}>{this.props.title}</div>
+        <div role={"heading"} className={"text-2xl mb-2"}>
+          {this.props.title}
+        </div>
         <div>{this.props.children}</div>
       </div>
     );
