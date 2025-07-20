@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import Button from "../button/Button.tsx";
 
 interface Props {
   children: ReactNode;
@@ -6,36 +7,22 @@ interface Props {
 
 interface State {
   hasError: boolean;
-  countdown: number;
 }
 
 export default class ErrorBoundary extends Component<Props, State> {
-  state: State = { hasError: false, countdown: 3 };
+  state: State = { hasError: false };
 
   static getDerivedStateFromError() {
-    return { hasError: true, countdown: 5 };
+    return { hasError: true };
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
     console.error(error, info.componentStack);
   }
 
-  recoverFromError() {
-    this.setState({ hasError: false, countdown: 5 });
-  }
-
-  componentDidUpdate() {
-    if (this.state.hasError) {
-      const timer = setTimeout(() => {
-        if (this.state.countdown > 0) {
-          this.setState((state) => ({ countdown: state.countdown - 1 }));
-        } else {
-          this.recoverFromError();
-        }
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }
+  recoverFromError = () => {
+    this.setState({ hasError: false });
+  };
 
   render() {
     const { hasError } = this.state;
@@ -46,12 +33,15 @@ export default class ErrorBoundary extends Component<Props, State> {
         <div
           className={"flex flex-col items-center justify-center w-full h-full"}
         >
-          <div className={"border rounded p-4 bg-red-100"}>
+          <div
+            className={
+              "border rounded p-4 bg-red-100 flex gap-4 justify-center"
+            }
+          >
             <div className={"text-4xl mb-3"}>Something went wrong</div>
-            <div>
-              Application will be reloaded automatically in{" "}
-              {this.state.countdown} seconds.
-            </div>
+            <Button onClick={this.recoverFromError} className={"text-lg"}>
+              Reload
+            </Button>
           </div>
         </div>
       );
