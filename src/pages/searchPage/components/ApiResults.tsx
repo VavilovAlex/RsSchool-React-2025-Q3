@@ -26,7 +26,10 @@ class ApiResults extends Component<Props> {
             {result == null ? (
               <tr>
                 <td colSpan={4}>
-                  <div className={"flex justify-center items-center mt-4"}>
+                  <div
+                    role={"spinner"}
+                    className={"flex justify-center items-center mt-4"}
+                  >
                     <Spinner />
                   </div>
                 </td>
@@ -41,7 +44,7 @@ class ApiResults extends Component<Props> {
                   </tr>
                 )}
                 {result.books.map((book) => (
-                  <tr key={book.key}>
+                  <tr role={"listitem"} key={book.key}>
                     <td>{book.title}</td>
                     <td>{book.firstPublishYear}</td>
                     <td>
