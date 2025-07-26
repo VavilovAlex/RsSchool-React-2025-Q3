@@ -9,26 +9,25 @@ interface Props {
   onSearchSuccess: (response: BookSearchResponse) => void;
   onSearchStart: () => void;
   onSearchError: (error: Error) => void;
+  pagination: PaginationOptions;
 }
 
-export default function ApiSearch(props: Props) {
+export default function ApiSearch({
+  onSearchSuccess,
+  onSearchStart,
+  onSearchError,
+  pagination,
+}: Props) {
   const [storedSearchText] = useState(
     localStorage.getItem("apiSearchText") ?? "",
   );
   const [searchText, setSearchText] = useState(storedSearchText);
-
-  const [pagination] = useState<PaginationOptions>({
-    page: 1,
-    pageSize: 10,
-  });
 
   const handleSearchTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
     setSearchText(value);
   };
-
-  const { onSearchSuccess, onSearchStart, onSearchError } = props;
 
   const search = useCallback(
     async (text: string, pagination: PaginationOptions) => {
@@ -49,7 +48,7 @@ export default function ApiSearch(props: Props) {
       }
     },
 
-    [onSearchStart, onSearchSuccess, onSearchError],
+    [onSearchError, onSearchStart, onSearchSuccess],
   );
 
   useEffect(() => {

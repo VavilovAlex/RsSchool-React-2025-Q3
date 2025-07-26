@@ -4,26 +4,31 @@ import Section from "./components/Section.tsx";
 import type { BookSearchResponse } from "../../api/book/models.ts";
 import Button from "../../components/button/Button.tsx";
 import type { HttpError } from "../../shared/errors/httpError.ts";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import type { PaginationOptions } from "../../shared/types/pagination.ts";
 
 export default function SearchPage() {
   const [response, setResponse] = useState<BookSearchResponse | null>(null);
   const [errorToThrow, setErrorToThrow] = useState<Error | null>(null);
   const [searchError, setSearchError] = useState<Error | null>(null);
+  const [pagination] = useState<PaginationOptions>({
+    page: 1,
+    pageSize: 10,
+  });
 
-  const handleSearchSuccess = (response: BookSearchResponse) => {
+  const handleSearchSuccess = useCallback((response: BookSearchResponse) => {
     setResponse(response);
     setSearchError(null);
-  };
+  }, []);
 
-  const handleSearchStart = () => {
+  const handleSearchStart = useCallback(() => {
     setResponse(null);
-  };
+  }, []);
 
-  const handleSearchError = (error: Error) => {
+  const handleSearchError = useCallback((error: Error) => {
     setSearchError(error);
     setResponse({ numFound: 0, start: 0, books: [] });
-  };
+  }, []);
 
   const throwTest = () => {
     setErrorToThrow(new Error("Test error"));
@@ -41,6 +46,7 @@ export default function SearchPage() {
             onSearchStart={handleSearchStart}
             onSearchSuccess={handleSearchSuccess}
             onSearchError={handleSearchError}
+            pagination={pagination}
           />
         </Section>
         {searchError && (
