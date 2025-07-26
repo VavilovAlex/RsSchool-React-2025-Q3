@@ -1,6 +1,16 @@
 import type { BookSearchResponse } from "@api/book/models.ts";
 import Spinner from "../../../components/spinner/Spinner.tsx";
 import Link from "../../../components/link/Link.tsx";
+import { useMemo } from "react";
+import type { PaginationOptions } from "@shared/types/pagination.ts";
+import { parseIntOrDefault } from "@shared/utils/parse.ts";
+import {
+  DEFAULT_PAGE,
+  DEFAULT_PAGE_SIZE,
+  QUERY_PAGE,
+  QUERY_PAGE_SIZE,
+} from "@pages/searchPage/components/apiSearch/ApiSearch.constants.ts";
+import { useSearchParams } from "react-router";
 
 interface Props {
   result: BookSearchResponse | null;
@@ -8,6 +18,44 @@ interface Props {
 
 export default function ApiResults(props: Props) {
   const { result } = props;
+
+  const [searchParams] = useSearchParams();
+
+  const pagination = useMemo<PaginationOptions>(
+    () => ({
+      page: parseIntOrDefault(searchParams.get(QUERY_PAGE), DEFAULT_PAGE),
+      pageSize: parseIntOrDefault(
+        searchParams.get(QUERY_PAGE_SIZE),
+        DEFAULT_PAGE_SIZE,
+      ),
+    }),
+    [searchParams],
+  );
+
+  const totalPages = useMemo(() => {
+    if (result == null) return 0;
+    return Math.ceil(result.numFound / pagination.pageSize);
+  }, [result, pagination]);
+
+  const pages = useMemo(() => {
+    if (totalPages <= 0) return [];
+    const maxPages = 20;
+    const currentPage = pagination.page;
+
+    if (totalPages <= maxPages) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    let start = Math.max(1, currentPage - Math.floor(maxPages / 2));
+    let end = start + maxPages - 1;
+
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(1, end - maxPages + 1);
+    }
+
+    return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+  }, [totalPages, pagination.page]);
 
   return (
     <div>
@@ -62,6 +110,23 @@ export default function ApiResults(props: Props) {
           )}
         </tbody>
       </table>
+      <div className={"flex justify-center mt-3"}>
+        {totalPages > 1 && (
+          <div className={"flex gap-2"}>
+            {pages.map((pageNum) => (
+              <Link
+                key={pageNum}
+                target={"_self"}
+                href={`?page=${pageNum}&pageSize=${pagination.pageSize}`}
+              >
+                <div className={"bg-blue-500 text-white rounded p-1"}>
+                  {pageNum}
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
