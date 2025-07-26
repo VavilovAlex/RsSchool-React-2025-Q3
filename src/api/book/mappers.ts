@@ -14,11 +14,13 @@ export function fromApiResponse(
 export function fromApiBook(book: ApiBookDocument): Book {
   const authors: Author[] = [];
 
-  for (let i = 0; i < book.author_key.length; i++) {
-    authors.push({
-      id: book.author_key[i],
-      name: book.author_name[i],
-    });
+  if (book.author_key && book.author_name) {
+    for (let i = 0; i < book.author_key.length; i++) {
+      authors.push({
+        id: book.author_key[i],
+        name: book.author_name[i],
+      });
+    }
   }
 
   return {

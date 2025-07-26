@@ -46,4 +46,28 @@ describe("fromApiResponse", () => {
 
     expect(result).toEqual(expectedResponse);
   });
+
+  it("return empty authors when no authors are present", () => {
+    const apiResponse: ApiBookSearchResponse = {
+      numFound: 1,
+      start: 0,
+      docs: [
+        {
+          cover_i: 14658094,
+          has_fulltext: true,
+          edition_count: 27,
+          title: "The Hero of Ages",
+          first_publish_year: 0,
+          key: "",
+          ia: [],
+          public_scan_b: false,
+          language: [],
+        },
+      ],
+    };
+
+    const result: BookSearchResponse = fromApiResponse(apiResponse);
+
+    expect(result.books[0].authors.length).toEqual(0);
+  });
 });
