@@ -1,4 +1,4 @@
-import type { QueryParams } from "../../shared/utils/queryParams.ts";
+import type { QueryParams } from "@shared/utils/queryParams.ts";
 
 export interface ApiBookSearchQuery extends QueryParams {
   q: string;

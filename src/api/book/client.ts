@@ -1,9 +1,9 @@
 import type { ApiBookSearchQuery, ApiBookSearchResponse } from "./types.ts";
-import type { PaginationOptions } from "../../shared/types/pagination.ts";
+import type { PaginationOptions } from "@/shared/types/pagination.ts";
 import { fromApiResponse } from "./mappers.ts";
 import type { BookSearchResponse } from "./models.ts";
-import { toQueryParams } from "../../shared/utils/queryParams.ts";
-import { HttpError } from "../../shared/errors/httpError.ts";
+import { toQueryParams } from "@/shared/utils/queryParams.ts";
+import { HttpError } from "@/shared/errors/httpError.ts";
 
 export async function searchBooks(
   query: string,

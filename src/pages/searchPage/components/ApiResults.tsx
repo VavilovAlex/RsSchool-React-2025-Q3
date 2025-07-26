@@ -1,4 +1,4 @@
-import type { BookSearchResponse } from "../../../api/book/models.ts";
+import type { BookSearchResponse } from "@api/book/models.ts";
 import Spinner from "../../../components/spinner/Spinner.tsx";
 import Link from "../../../components/link/Link.tsx";
 

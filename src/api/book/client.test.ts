@@ -3,7 +3,7 @@ import { searchBooks } from "./client.ts";
 import type { ApiBookSearchResponse } from "./types.ts";
 import * as mappers from "./mappers.ts";
 import type { BookSearchResponse } from "./models.ts";
-import { HttpError } from "../../shared/errors/httpError.ts";
+import { HttpError } from "@shared/errors/httpError.ts";
 
 const mappedResponse: BookSearchResponse = { books: [], start: 0, numFound: 0 };
 
