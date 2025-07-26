@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import TextInput from "../../../../components/textInput/TextInput.tsx";
-import AsyncButton from "../../../../components/button/AsyncButton.tsx";
 import { searchBooks } from "@api/book/client.ts";
 import type { PaginationOptions } from "@shared/types/pagination.ts";
 import type { BookSearchResponse } from "@api/book/models.ts";
@@ -13,6 +12,7 @@ import {
   QUERY_PAGE_SIZE,
 } from "./ApiSearch.constants.ts";
 import { parseIntOrDefault } from "@shared/utils/parse.ts";
+import Button from "@components/button/Button.tsx";
 
 interface Props {
   onUpdate: (response: ApiSearchResult) => void;
@@ -24,10 +24,10 @@ export type ApiSearchResult =
   | { status: "error"; error: Error };
 
 export default function ApiSearch({ onUpdate }: Props) {
-  const [storedSearchText] = useState(
+  const [submittedSearchText, setSubmittedSearchText] = useState(
     localStorage.getItem(LOCALSTORAGE_SEARCH_KEY) ?? "",
   );
-  const [searchText, setSearchText] = useState(storedSearchText);
+  const [searchText, setSearchText] = useState(submittedSearchText);
 
   const [searchParams] = useSearchParams();
 
@@ -76,19 +76,19 @@ export default function ApiSearch({ onUpdate }: Props) {
   );
 
   useEffect(() => {
-    search(storedSearchText, pagination).catch(console.error);
-  }, [pagination, storedSearchText, search]);
+    search(submittedSearchText, pagination).catch(console.error);
+  }, [pagination, submittedSearchText, search]);
 
   return (
-    <div className="flex flex-row w-full gap-1">
-      <TextInput
-        className={"w-full"}
-        value={searchText}
-        onChange={(e) => setSearchText(e.target.value)}
-      />
-      <AsyncButton onClick={() => search(searchText, pagination)}>
-        Search
-      </AsyncButton>
-    </div>
+    <form onSubmit={() => setSubmittedSearchText(searchText)}>
+      <div className="flex flex-row w-full gap-1">
+        <TextInput
+          className={"w-full"}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+        <Button type={"submit"}>Search</Button>
+      </div>
+    </form>
   );
 }
