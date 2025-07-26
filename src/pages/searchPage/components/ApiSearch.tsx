@@ -1,4 +1,4 @@
-import { type ChangeEvent, Component } from "react";
+import { type ChangeEvent, useCallback, useEffect, useState } from "react";
 import TextInput from "../../../components/textInput/TextInput.tsx";
 import AsyncButton from "../../../components/button/AsyncButton.tsx";
 import { searchBooks } from "../../../api/book/client.ts";
@@ -11,63 +11,61 @@ interface Props {
   onSearchError: (error: Error) => void;
 }
 
-interface State {
-  searchText: string;
-  pagination: PaginationOptions;
-  error?: Error | null;
-}
+export default function ApiSearch(props: Props) {
+  const [storedSearchText] = useState(
+    localStorage.getItem("apiSearchText") ?? "",
+  );
+  const [searchText, setSearchText] = useState(storedSearchText);
 
-export default class ApiSearch extends Component<Props, State> {
-  state: State = {
-    searchText: localStorage.getItem("apiSearchText") || "",
-    pagination: {
-      page: 1,
-      pageSize: 10,
-    },
-  };
+  const [pagination] = useState<PaginationOptions>({
+    page: 1,
+    pageSize: 10,
+  });
 
-  componentDidMount() {
-    this.search().catch(console.error);
-  }
-
-  handleSearchTextChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSearchTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    this.setState({ searchText: value });
+    setSearchText(value);
   };
 
-  search = async () => {
-    const { searchText, pagination } = this.state;
+  const { onSearchSuccess, onSearchStart, onSearchError } = props;
 
-    const normalizedSearchText = searchText.trim();
+  const search = useCallback(
+    async (text: string, pagination: PaginationOptions) => {
+      const normalizedSearchText = text.trim();
 
-    this.setState({ searchText: normalizedSearchText });
+      setSearchText(normalizedSearchText);
 
-    localStorage.setItem("apiSearchText", normalizedSearchText);
+      localStorage.setItem("apiSearchText", normalizedSearchText);
 
-    this.props.onSearchStart();
+      onSearchStart();
 
-    try {
-      const result = await searchBooks(normalizedSearchText, pagination);
-      this.props.onSearchSuccess(result);
-    } catch (e) {
-      console.error(e);
-      this.props.onSearchError(e as Error);
-    }
-  };
+      try {
+        const result = await searchBooks(normalizedSearchText, pagination);
+        onSearchSuccess(result);
+      } catch (e) {
+        console.error(e);
+        onSearchError(e as Error);
+      }
+    },
 
-  render() {
-    const { searchText } = this.state;
+    [onSearchStart, onSearchSuccess, onSearchError],
+  );
 
-    return (
-      <div className="flex flex-row w-full gap-1">
-        <TextInput
-          className={"w-full"}
-          value={searchText}
-          onChange={this.handleSearchTextChange}
-        />
-        <AsyncButton onClick={this.search}>Search</AsyncButton>
-      </div>
-    );
-  }
+  useEffect(() => {
+    search(storedSearchText, pagination).catch(console.error);
+  }, [pagination, search, storedSearchText]);
+
+  return (
+    <div className="flex flex-row w-full gap-1">
+      <TextInput
+        className={"w-full"}
+        value={searchText}
+        onChange={handleSearchTextChange}
+      />
+      <AsyncButton onClick={() => search(searchText, pagination)}>
+        Search
+      </AsyncButton>
+    </div>
+  );
 }

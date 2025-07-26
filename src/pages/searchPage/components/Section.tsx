@@ -1,27 +1,21 @@
-import React, { Component } from "react";
+import { type ReactNode } from "react";
 import { clsx } from "clsx";
 
 interface SectionProps {
   title: string;
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-class Section extends Component<SectionProps> {
-  render() {
-    const { className: propClassName } = this.props;
+export default function Section(props: SectionProps) {
+  const className = "border p-4";
 
-    const className = "border p-4";
-
-    return (
-      <div className={clsx(className, propClassName)}>
-        <div role={"heading"} className={"text-2xl mb-2"}>
-          {this.props.title}
-        </div>
-        <div>{this.props.children}</div>
+  return (
+    <div className={clsx(className, props.className)}>
+      <div role={"heading"} className={"text-2xl mb-2"}>
+        {props.title}
       </div>
-    );
-  }
+      <div>{props.children}</div>
+    </div>
+  );
 }
-
-export default Section;
