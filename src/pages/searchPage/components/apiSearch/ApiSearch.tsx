@@ -80,7 +80,10 @@ export default function ApiSearch({ onUpdate }: Props) {
   }, [pagination, submittedSearchText, search]);
 
   return (
-    <form onSubmit={() => setSubmittedSearchText(searchText)}>
+    <form
+      aria-label="Search books"
+      onSubmit={() => setSubmittedSearchText(searchText)}
+    >
       <div className="flex flex-row w-full gap-1">
         <TextInput
           className={"w-full"}
