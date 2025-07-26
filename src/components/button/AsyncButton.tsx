@@ -1,28 +1,18 @@
-import { type ButtonHTMLAttributes, Component, type MouseEvent } from "react";
+import { type ButtonHTMLAttributes, type MouseEvent, useState } from "react";
 import Button from "./Button.tsx";
-
-interface State {
-  isLoading: boolean;
-}
 
 interface AsyncButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "onClick"> {
   onClick?: (e: MouseEvent<HTMLButtonElement>) => Promise<unknown>;
 }
 
-class AsyncButton extends Component<AsyncButtonProps, State> {
-  state: State = {
-    isLoading: false,
-  };
+export default function AsyncButton(props: AsyncButtonProps) {
+  const [isLoading, setIsLoading] = useState(false);
 
-  private get isDisabled() {
-    return this.props.disabled || this.state.isLoading;
-  }
+  const handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
+    const { onClick } = props;
 
-  handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
-    const { onClick } = this.props;
-
-    this.setState({ isLoading: true });
+    setIsLoading(true);
 
     try {
       if (onClick == null) {
@@ -34,19 +24,16 @@ class AsyncButton extends Component<AsyncButtonProps, State> {
       console.error(e);
       throw e;
     } finally {
-      this.setState({ isLoading: false });
+      setIsLoading(false);
     }
   };
+  const { children, ...rest } = props;
 
-  render() {
-    const { children, ...rest } = this.props;
+  const isDisabled = props.disabled || isLoading;
 
-    return (
-      <Button {...rest} disabled={this.isDisabled} onClick={this.handleClick}>
-        {children}
-      </Button>
-    );
-  }
+  return (
+    <Button {...rest} disabled={isDisabled} onClick={handleClick}>
+      {children}
+    </Button>
+  );
 }
-
-export default AsyncButton;
