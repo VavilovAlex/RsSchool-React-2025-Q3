@@ -10,6 +10,7 @@ import {
 import { useSearchParams, useNavigate } from "react-router";
 import { QUERY_DETAILS_ID } from "@pages/detailsPage/DetailsPage.constants.ts";
 import Paginator from "@components/paginator/Paginator.tsx";
+import { type MouseEvent } from "react";
 
 interface Props {
   result: BookSearchResponse | null;
@@ -21,7 +22,8 @@ export default function ApiResults(props: Props) {
   const [searchParams] = useSearchParams();
 
   const navigate = useNavigate();
-  const openDetails = (id: string) => {
+  const openDetails = (e: MouseEvent<HTMLTableRowElement>, id: string) => {
+    e.stopPropagation();
     searchParams.set(QUERY_DETAILS_ID, id);
     navigate({ search: searchParams.toString() });
   };
@@ -64,7 +66,7 @@ export default function ApiResults(props: Props) {
                 <tr
                   role={"listitem"}
                   key={book.key}
-                  onClick={() => openDetails(book.key)}
+                  onClick={(e) => openDetails(e, book.key)}
                 >
                   <td>{book.title}</td>
                   <td>{book.firstPublishYear}</td>
