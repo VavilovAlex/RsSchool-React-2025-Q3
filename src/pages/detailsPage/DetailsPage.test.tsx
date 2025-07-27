@@ -1,7 +1,7 @@
 import renderWithRouter from "@/test-utils/renderWithRouter.tsx";
 import { describe, vi } from "vitest";
 import { DetailsPage } from "@pages/detailsPage/DetailsPage.tsx";
-import { screen, waitFor } from "@testing-library/react";
+import { act, screen, waitFor } from "@testing-library/react";
 import { QUERY_DETAILS_ID } from "@pages/detailsPage/DetailsPage.constants.ts";
 import { getBook } from "@api/book/client.ts";
 import type { BookDetailsResponse } from "@api/book/models.ts";
@@ -56,6 +56,36 @@ describe("DetailsPage", () => {
       expect(screen.getByText(details.description || "")).toBeInTheDocument();
 
       expect(mockedGetBook).toHaveBeenCalledWith(fakeKey);
+    });
+  });
+
+  it("closes on close button click", async () => {
+    const fakeKey = "fakeKey";
+
+    const details: BookDetailsResponse = {
+      key: fakeKey,
+      subjects: [],
+      title: "My Book",
+      description: "My Book Description",
+    };
+
+    mockedGetBook.mockResolvedValue(details);
+
+    render(<DetailsPage />, {
+      routerOptions: { initialEntries: [`/?${QUERY_DETAILS_ID}=${fakeKey}`] },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(details.title)).toBeInTheDocument();
+    });
+
+    act(() => {
+      const closeButton = screen.getByRole("button", { name: "Close" });
+      closeButton.click();
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByText(details.title)).not.toBeInTheDocument();
     });
   });
 });
