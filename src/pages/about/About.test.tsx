@@ -14,7 +14,7 @@ describe("About", () => {
 
     expect(screen.getByRole("link")).toHaveAttribute(
       "href",
-      "https://rs.school/",
+      "https://rs.school/courses/reactjs",
     );
   });
 });

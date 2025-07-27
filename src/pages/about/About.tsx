@@ -7,7 +7,7 @@ export default function About() {
         <title>About</title>
         <div className={"text-xl"}>About page</div>
         <div>My name is Alex</div>
-        <TextLink href={"https://rs.school/"} target={"_blank"}>
+        <TextLink href={"https://rs.school/courses/reactjs"} target={"_blank"}>
           Rs School
         </TextLink>
       </div>
