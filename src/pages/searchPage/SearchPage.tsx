@@ -30,20 +30,18 @@ export default function SearchPage() {
   const httpError = searchError as HttpError;
 
   return (
-    <div className={"flex flex-col items-center w-full h-full p-4"}>
-      <div className={"flex flex-col gap-4 max-w-[1200px] w-full"}>
-        <Section title={"Search"}>
-          <ApiSearch onUpdate={handleSearchUpdate} />
+    <div className={"flex flex-col gap-4 max-w-[1200px] w-full"}>
+      <Section title={"Search"}>
+        <ApiSearch onUpdate={handleSearchUpdate} />
+      </Section>
+      {searchError && (
+        <Section title={"Search error"} className={"bg-red-100"}>
+          Search failed with code: {httpError.statusCode}
         </Section>
-        {searchError && (
-          <Section title={"Search error"} className={"bg-red-100"}>
-            Search failed with code: {httpError.statusCode}
-          </Section>
-        )}
-        <Section title={"Results"}>
-          <ApiResults result={response} />
-        </Section>
-      </div>
+      )}
+      <Section title={"Results"}>
+        <ApiResults result={response} />
+      </Section>
     </div>
   );
 }
