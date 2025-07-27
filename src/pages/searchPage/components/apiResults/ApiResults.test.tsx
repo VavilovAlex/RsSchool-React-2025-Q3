@@ -1,7 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import ApiResults from "./ApiResults";
+import { screen } from "@testing-library/react";
+import ApiResults from "./ApiResults.tsx";
 import type { Book, BookSearchResponse } from "@api/book/models.ts";
+import renderWithRouter from "@/test-utils/renderWithRouter.tsx";
+
+const render = renderWithRouter;
 
 describe("ApiResults", () => {
   it("shows a spinner when result is null", () => {

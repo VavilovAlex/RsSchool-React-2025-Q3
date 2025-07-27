@@ -1,7 +1,7 @@
 import ApiSearch, {
   type ApiSearchResult,
 } from "./components/apiSearch/ApiSearch.tsx";
-import ApiResults from "./components/ApiResults.tsx";
+import ApiResults from "./components/apiResults/ApiResults.tsx";
 import Section from "./components/Section.tsx";
 import type { BookSearchResponse } from "@api/book/models.ts";
 import Button from "../../components/button/Button.tsx";

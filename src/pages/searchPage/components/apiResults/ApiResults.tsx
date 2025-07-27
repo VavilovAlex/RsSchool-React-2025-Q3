@@ -1,5 +1,5 @@
 import type { BookSearchResponse } from "@api/book/models.ts";
-import Spinner from "../../../components/spinner/Spinner.tsx";
+import Spinner from "@components/spinner/Spinner.tsx";
 import TextLink from "@components/link/TextLink.tsx";
 import { useMemo } from "react";
 import type { PaginationOptions } from "@shared/types/pagination.ts";

@@ -1,7 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SearchPage from "./SearchPage";
+import renderWithRouter from "@/test-utils/renderWithRouter.tsx";
+
+const render = renderWithRouter;
 
 describe("SearchPage", () => {
   it("renders Search, Results and Test sections", () => {
