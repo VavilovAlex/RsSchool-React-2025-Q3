@@ -2,7 +2,7 @@ import ApiSearch, {
   type ApiSearchResult,
 } from "./components/apiSearch/ApiSearch.tsx";
 import ApiResults from "./components/apiResults/ApiResults.tsx";
-import Section from "./components/Section.tsx";
+import Section from "@components/section/Section.tsx";
 import type { BookSearchResponse } from "@api/book/models.ts";
 import type { HttpError } from "@shared/errors/httpError.ts";
 import { useState } from "react";
