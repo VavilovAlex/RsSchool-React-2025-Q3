@@ -10,6 +10,7 @@ interface Props {
   defaultPage: number;
   defaultPageSize: number;
   totalCount: number;
+  maxPages?: number;
 }
 
 export default function Paginator(props: Props) {
@@ -19,6 +20,7 @@ export default function Paginator(props: Props) {
     defaultPage,
     defaultPageSize,
     totalCount = 0,
+    maxPages = 10,
   } = props;
 
   const [searchParams] = useSearchParams();
@@ -41,7 +43,6 @@ export default function Paginator(props: Props) {
 
   const pages = useMemo(() => {
     if (totalPages <= 0) return [];
-    const maxPages = 10;
     const currentPage = pagination.page;
 
     if (totalPages <= maxPages) {
@@ -57,7 +58,7 @@ export default function Paginator(props: Props) {
     }
 
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  }, [totalPages, pagination.page]);
+  }, [totalPages, pagination.page, maxPages]);
 
   const handlePageClick = (pageNum: number) => {
     searchParams.set(queryPage, String(pageNum));

@@ -15,7 +15,12 @@ export default function PageButton(props: Props) {
   if (props.current) className = clsx(className, "bg-blue-700");
 
   return (
-    <div className={className} onClick={() => onClick(pageNum)} key={pageNum}>
+    <div
+      className={className}
+      onClick={() => onClick(pageNum)}
+      key={pageNum}
+      role={"button"}
+    >
       {pageNum}
     </div>
   );
