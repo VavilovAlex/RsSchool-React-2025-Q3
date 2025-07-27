@@ -13,6 +13,7 @@ import {
 } from "./ApiSearch.constants.ts";
 import { parseIntOrDefault } from "@shared/utils/parse.ts";
 import Button from "@components/button/Button.tsx";
+import { useLocalStorage } from "@/hooks/useLocalStorage.tsx";
 
 interface Props {
   onUpdate: (response: ApiSearchResult) => void;
@@ -24,9 +25,13 @@ export type ApiSearchResult =
   | { status: "error"; error: Error };
 
 export default function ApiSearch({ onUpdate }: Props) {
-  const [submittedSearchText, setSubmittedSearchText] = useState(
-    localStorage.getItem(LOCALSTORAGE_SEARCH_KEY) ?? "",
+  const [storedSearchText, setStoredSearchText] = useLocalStorage<string>(
+    LOCALSTORAGE_SEARCH_KEY,
+    "",
   );
+
+  const [submittedSearchText, setSubmittedSearchText] =
+    useState(storedSearchText);
   const [searchText, setSearchText] = useState(submittedSearchText);
 
   const [searchParams] = useSearchParams();
@@ -59,7 +64,7 @@ export default function ApiSearch({ onUpdate }: Props) {
 
       setSearchText(normalizedSearchText);
 
-      localStorage.setItem(LOCALSTORAGE_SEARCH_KEY, normalizedSearchText);
+      setStoredSearchText(normalizedSearchText);
 
       setApiSearchResult({ status: "loading" });
 
@@ -75,7 +80,7 @@ export default function ApiSearch({ onUpdate }: Props) {
       }
     },
 
-    [],
+    [setStoredSearchText],
   );
 
   useEffect(() => {
