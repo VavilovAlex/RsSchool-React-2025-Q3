@@ -26,3 +26,15 @@ export interface ApiBookDocument {
   public_scan_b: boolean;
   language: string[];
 }
+
+export interface ApiBookDetailsResponse {
+  title: string;
+  key: string;
+  subjects: string[];
+  description: string | ApiBookDetailsDescription;
+}
+
+export interface ApiBookDetailsDescription {
+  type: string;
+  value: string;
+}

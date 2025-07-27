@@ -1,5 +1,14 @@
-import type { ApiBookDocument, ApiBookSearchResponse } from "./types.ts";
-import type { Author, Book, BookSearchResponse } from "./models.ts";
+import type {
+  ApiBookDetailsResponse,
+  ApiBookDocument,
+  ApiBookSearchResponse,
+} from "./types.ts";
+import type {
+  Author,
+  Book,
+  BookDetailsResponse,
+  BookSearchResponse,
+} from "./models.ts";
 
 export function fromApiResponse(
   response: ApiBookSearchResponse,
@@ -29,5 +38,27 @@ export function fromApiBook(book: ApiBookDocument): Book {
     title: book.title,
     authors: authors,
     languages: book.language,
+  };
+}
+
+export function fromBookDetailsResponse(
+  details: ApiBookDetailsResponse,
+): BookDetailsResponse {
+  let description: string | null = null;
+
+  if (typeof details.description === "string") {
+    description = details.description;
+  } else if (
+    typeof details.description === "object" &&
+    details.description.type === "/type/text"
+  ) {
+    description = details.description.value;
+  }
+
+  return {
+    description: description,
+    key: details.key,
+    subjects: details.subjects,
+    title: details.title,
   };
 }

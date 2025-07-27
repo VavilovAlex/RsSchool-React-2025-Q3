@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { fromApiResponse } from "./mappers";
-import type { ApiBookSearchResponse } from "./types";
-import type { BookSearchResponse } from "./models";
+import { fromApiResponse, fromBookDetailsResponse } from "./mappers";
+import type { ApiBookDetailsResponse, ApiBookSearchResponse } from "./types";
+import type { BookDetailsResponse, BookSearchResponse } from "./models";
 
 describe("fromApiResponse", () => {
   const apiResponse: ApiBookSearchResponse = {
@@ -69,5 +69,30 @@ describe("fromApiResponse", () => {
     const result: BookSearchResponse = fromApiResponse(apiResponse);
 
     expect(result.books[0].authors.length).toEqual(0);
+  });
+});
+
+describe("fromBookDetailsResponse", () => {
+  it("maps the details response to the expected shape", () => {
+    const apiResponse: ApiBookDetailsResponse = {
+      title: "The Hero of Ages",
+      description: {
+        type: "/type/text",
+        value: "...",
+      },
+      key: "/works/OL5738154W",
+      subjects: ["A", "B", "C"],
+    };
+
+    const expected: BookDetailsResponse = {
+      title: "The Hero of Ages",
+      description: "...",
+      key: "/works/OL5738154W",
+      subjects: ["A", "B", "C"],
+    };
+
+    const result: BookDetailsResponse = fromBookDetailsResponse(apiResponse);
+
+    expect(result).toEqual(expected);
   });
 });
