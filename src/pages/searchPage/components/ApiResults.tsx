@@ -1,6 +1,6 @@
 import type { BookSearchResponse } from "@api/book/models.ts";
 import Spinner from "../../../components/spinner/Spinner.tsx";
-import Link from "../../../components/link/Link.tsx";
+import TextLink from "@components/link/TextLink.tsx";
 import { useMemo } from "react";
 import type { PaginationOptions } from "@shared/types/pagination.ts";
 import { parseIntOrDefault } from "@shared/utils/parse.ts";
@@ -97,12 +97,12 @@ export default function ApiResults(props: Props) {
                     {book.authors.map((author) => author.name).join(", ")}
                   </td>
                   <td>
-                    <Link
+                    <TextLink
                       href={"https://openlibrary.org/" + book.key}
                       target={"_blank"}
                     >
                       Link
-                    </Link>
+                    </TextLink>
                   </td>
                 </tr>
               ))}
@@ -114,7 +114,7 @@ export default function ApiResults(props: Props) {
         {totalPages > 1 && (
           <div className={"flex gap-2"}>
             {pages.map((pageNum) => (
-              <Link
+              <TextLink
                 key={pageNum}
                 target={"_self"}
                 href={`?page=${pageNum}&pageSize=${pagination.pageSize}`}
@@ -122,7 +122,7 @@ export default function ApiResults(props: Props) {
                 <div className={"bg-blue-500 text-white rounded p-1"}>
                   {pageNum}
                 </div>
-              </Link>
+              </TextLink>
             ))}
           </div>
         )}

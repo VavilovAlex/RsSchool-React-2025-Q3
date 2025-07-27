@@ -6,7 +6,7 @@ interface Props {
   children: ReactNode;
 }
 
-export default function Link(props: Props) {
+export default function TextLink(props: Props) {
   const { target, href, children } = props;
 
   const className =
