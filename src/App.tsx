@@ -6,6 +6,7 @@ import About from "@pages/about/About.tsx";
 import Navbar from "@components/navbar/Navbar.tsx";
 import { ROUTES } from "@pages/routes.ts";
 import SearchPageLayout from "@pages/searchPage/SearchPageLayout.tsx";
+import { DetailsPage } from "@pages/detailsPage/DetailsPage.tsx";
 
 export default function App() {
   return (
@@ -14,7 +15,9 @@ export default function App() {
         <BrowserRouter>
           <Navbar />
           <Routes>
-            <Route path={ROUTES.Home()} element={<SearchPageLayout />} />
+            <Route path={ROUTES.Home()} element={<SearchPageLayout />}>
+              <Route index element={<DetailsPage />} />
+            </Route>
             <Route path={ROUTES.About} element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

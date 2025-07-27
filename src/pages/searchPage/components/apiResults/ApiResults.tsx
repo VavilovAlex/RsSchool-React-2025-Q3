@@ -10,8 +10,9 @@ import {
   QUERY_PAGE,
   QUERY_PAGE_SIZE,
 } from "@pages/searchPage/components/apiSearch/ApiSearch.constants.ts";
-import { Link, useSearchParams } from "react-router";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { ROUTES } from "@pages/routes.ts";
+import { QUERY_DETAILS_ID } from "@pages/detailsPage/DetailsPage.constants.ts";
 
 interface Props {
   result: BookSearchResponse | null;
@@ -40,7 +41,7 @@ export default function ApiResults(props: Props) {
 
   const pages = useMemo(() => {
     if (totalPages <= 0) return [];
-    const maxPages = 20;
+    const maxPages = 10;
     const currentPage = pagination.page;
 
     if (totalPages <= maxPages) {
@@ -57,6 +58,13 @@ export default function ApiResults(props: Props) {
 
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }, [totalPages, pagination.page]);
+
+  const navigate = useNavigate();
+  const openDetails = (id: string) => {
+    const currentSearchParams = new URLSearchParams(searchParams);
+    currentSearchParams.set(QUERY_DETAILS_ID, id);
+    navigate({ search: currentSearchParams.toString() });
+  };
 
   return (
     <div>
@@ -91,7 +99,11 @@ export default function ApiResults(props: Props) {
                 </tr>
               )}
               {result.books.map((book) => (
-                <tr role={"listitem"} key={book.key}>
+                <tr
+                  role={"listitem"}
+                  key={book.key}
+                  onClick={() => openDetails(book.key)}
+                >
                   <td>{book.title}</td>
                   <td>{book.firstPublishYear}</td>
                   <td>
