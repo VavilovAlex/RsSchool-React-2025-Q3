@@ -4,13 +4,11 @@ import ApiSearch, {
 import ApiResults from "./components/apiResults/ApiResults.tsx";
 import Section from "./components/Section.tsx";
 import type { BookSearchResponse } from "@api/book/models.ts";
-import Button from "../../components/button/Button.tsx";
 import type { HttpError } from "@shared/errors/httpError.ts";
 import { useState } from "react";
 
 export default function SearchPage() {
   const [response, setResponse] = useState<BookSearchResponse | null>(null);
-  const [errorToThrow, setErrorToThrow] = useState<Error | null>(null);
   const [searchError, setSearchError] = useState<Error | null>(null);
 
   const handleSearchUpdate = (result: ApiSearchResult) => {
@@ -29,12 +27,6 @@ export default function SearchPage() {
     }
   };
 
-  const throwTest = () => {
-    setErrorToThrow(new Error("Test error"));
-  };
-
-  if (errorToThrow != null) throw errorToThrow;
-
   const httpError = searchError as HttpError;
 
   return (
@@ -50,9 +42,6 @@ export default function SearchPage() {
         )}
         <Section title={"Results"}>
           <ApiResults result={response} />
-        </Section>
-        <Section title={"Test"}>
-          <Button onClick={throwTest}>Trigger Error Boundary</Button>
         </Section>
       </div>
     </div>
