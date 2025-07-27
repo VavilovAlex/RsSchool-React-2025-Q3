@@ -1,72 +1,47 @@
-import { Component } from "react";
-import ApiSearch from "./components/ApiSearch.tsx";
-import ApiResults from "./components/ApiResults.tsx";
-import Section from "./components/Section.tsx";
-import type { BookSearchResponse } from "../../api/book/models.ts";
-import Button from "../../components/button/Button.tsx";
-import type { HttpError } from "../../shared/errors/httpError.ts";
+import ApiSearch, {
+  type ApiSearchResult,
+} from "./components/apiSearch/ApiSearch.tsx";
+import ApiResults from "./components/apiResults/ApiResults.tsx";
+import Section from "@components/section/Section.tsx";
+import type { BookSearchResponse } from "@api/book/models.ts";
+import type { HttpError } from "@shared/errors/httpError.ts";
+import { useState } from "react";
 
-interface State {
-  response: BookSearchResponse | null;
-  errorToThrow: Error | null;
-  searchError?: Error | null;
-}
+export default function SearchPage() {
+  const [response, setResponse] = useState<BookSearchResponse | null>(null);
+  const [searchError, setSearchError] = useState<Error | null>(null);
 
-export default class SearchPage extends Component<object, State> {
-  state: State = {
-    response: null,
-    errorToThrow: null,
+  const handleSearchUpdate = (result: ApiSearchResult) => {
+    switch (result.status) {
+      case "loading":
+        setResponse(null);
+        setSearchError(null);
+        break;
+      case "success":
+        setSearchError(null);
+        setResponse(result.data);
+        break;
+      case "error":
+        setSearchError(result.error);
+        setResponse({ numFound: 0, start: 0, books: [] });
+    }
   };
 
-  handleSearchSuccess = (response: BookSearchResponse) => {
-    this.setState({ response, searchError: null });
-  };
+  const httpError = searchError as HttpError;
 
-  handleSearchStart = () => {
-    this.setState({ response: null });
-  };
-
-  handleSearchError = (error: Error) => {
-    this.setState({
-      searchError: error,
-      response: { numFound: 0, start: 0, books: [] },
-    });
-  };
-
-  throw = () => {
-    this.setState({ errorToThrow: new Error("Test error") });
-  };
-
-  render() {
-    const { response, searchError } = this.state;
-
-    if (this.state.errorToThrow != null) throw this.state.errorToThrow;
-
-    const httpError = searchError as HttpError;
-
-    return (
-      <div className={"flex flex-col items-center w-full h-full p-4"}>
-        <div className={"flex flex-col gap-4 max-w-[1200px] w-full"}>
-          <Section title={"Search"}>
-            <ApiSearch
-              onSearchStart={this.handleSearchStart}
-              onSearchSuccess={this.handleSearchSuccess}
-              onSearchError={this.handleSearchError}
-            />
-          </Section>
-          {searchError && (
-            <Section title={"Search error"} className={"bg-red-100"}>
-              Search failed with code: {httpError.statusCode}
-            </Section>
-          )}
-          <Section title={"Results"}>
-            <ApiResults result={response} />
-          </Section>
-          <Section title={"Test"}>
-            <Button onClick={this.throw}>Trigger Error Boundary</Button>
-          </Section>
-        </div>
-      </div>
-    );
-  }
+  return (
+    <div className={"flex flex-col gap-4 max-w-[1200px] w-full"}>
+      <Section title={"Search"}>
+        <ApiSearch onUpdate={handleSearchUpdate} />
+      </Section>
+      {searchError && (
+        <Section title={"Search error"} className={"bg-red-100"}>
+          Search failed with code: {httpError.statusCode}
+        </Section>
+      )}
+      <Section title={"Results"}>
+        <ApiResults result={response} />
+      </Section>
+    </div>
+  );
 }

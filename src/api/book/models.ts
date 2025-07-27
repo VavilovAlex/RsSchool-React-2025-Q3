@@ -16,3 +16,10 @@ export interface Author {
   id: string;
   name: string;
 }
+
+export interface BookDetailsResponse {
+  title: string;
+  key: string;
+  subjects: string[];
+  description: string | null;
+}

@@ -1,7 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import ApiResults from "./ApiResults";
-import type { Book, BookSearchResponse } from "../../../api/book/models";
+import { act, screen } from "@testing-library/react";
+import ApiResults from "./ApiResults.tsx";
+import type { Book, BookSearchResponse } from "@api/book/models.ts";
+import renderWithRouter from "@/test-utils/renderWithRouter.tsx";
+import LocationDisplay from "@/test-utils/LocationDisplay.tsx";
+import { QUERY_DETAILS_ID } from "@pages/detailsPage/DetailsPage.constants.ts";
+
+const render = renderWithRouter;
 
 describe("ApiResults", () => {
   it("shows a spinner when result is null", () => {
@@ -65,5 +70,40 @@ describe("ApiResults", () => {
     render(<ApiResults result={mockResult} />);
 
     expect(screen.getAllByRole("listitem")).toHaveLength(books.length);
+  });
+
+  it("update url when clicking on a book", () => {
+    const books: Book[] = [
+      {
+        key: `OL1`,
+        title: "My Book",
+        firstPublishYear: 2021,
+        authors: [{ id: "123", name: "Bob" }],
+        languages: ["en"],
+      },
+    ];
+
+    const mockResult: BookSearchResponse = {
+      start: 0,
+      numFound: 1,
+      books: books,
+    };
+
+    render(
+      <>
+        <ApiResults result={mockResult} />
+        <LocationDisplay />
+      </>,
+    );
+
+    const title = screen.getByText("My Book");
+
+    act(() => {
+      title.click();
+    });
+
+    expect(screen.getByTestId("search")).toHaveTextContent(
+      `?${QUERY_DETAILS_ID}=OL1`,
+    );
   });
 });
