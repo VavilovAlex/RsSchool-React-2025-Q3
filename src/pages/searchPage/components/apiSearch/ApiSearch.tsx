@@ -39,15 +39,18 @@ export default function ApiSearch({ onUpdate }: Props) {
     onUpdate(apiSearchResult);
   }, [apiSearchResult, onUpdate]);
 
+  const page = parseIntOrDefault(searchParams.get(QUERY_PAGE), DEFAULT_PAGE);
+  const pageSize = parseIntOrDefault(
+    searchParams.get(QUERY_PAGE_SIZE),
+    DEFAULT_PAGE_SIZE,
+  );
+
   const pagination = useMemo<PaginationOptions>(
     () => ({
-      page: parseIntOrDefault(searchParams.get(QUERY_PAGE), DEFAULT_PAGE),
-      pageSize: parseIntOrDefault(
-        searchParams.get(QUERY_PAGE_SIZE),
-        DEFAULT_PAGE_SIZE,
-      ),
+      page: page,
+      pageSize: pageSize,
     }),
-    [searchParams],
+    [page, pageSize],
   );
 
   const search = useCallback(
