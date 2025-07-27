@@ -11,8 +11,8 @@ export default function App() {
       <ErrorBoundary>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<SearchPage />} />
-            <Route path="/about" element={<About />} />
+            <Route path={ROUTES.Home()} element={<SearchPage />} />
+            <Route path={ROUTES.About} element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -10,7 +10,8 @@ import {
   QUERY_PAGE,
   QUERY_PAGE_SIZE,
 } from "@pages/searchPage/components/apiSearch/ApiSearch.constants.ts";
-import { useSearchParams } from "react-router";
+import { Link, useSearchParams } from "react-router";
+import { ROUTES } from "@pages/routes.ts";
 
 interface Props {
   result: BookSearchResponse | null;
@@ -114,15 +115,14 @@ export default function ApiResults(props: Props) {
         {totalPages > 1 && (
           <div className={"flex gap-2"}>
             {pages.map((pageNum) => (
-              <TextLink
+              <Link
                 key={pageNum}
-                target={"_self"}
-                href={`?page=${pageNum}&pageSize=${pagination.pageSize}`}
+                to={ROUTES.Home(pageNum, pagination.pageSize)}
               >
                 <div className={"bg-blue-500 text-white rounded p-1"}>
                   {pageNum}
                 </div>
-              </TextLink>
+              </Link>
             ))}
           </div>
         )}
