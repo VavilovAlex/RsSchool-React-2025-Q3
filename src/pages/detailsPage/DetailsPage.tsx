@@ -16,6 +16,7 @@ export function DetailsPage() {
   const [details, setDetails] = useState<BookDetailsResponse | null>(null);
 
   const requestDetails = useCallback(async (key: string) => {
+    setDetails(null);
     const book = await getBook(key);
     setDetails(book);
   }, []);
