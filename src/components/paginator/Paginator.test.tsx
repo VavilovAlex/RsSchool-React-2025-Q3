@@ -3,6 +3,10 @@ import renderWithRouter from "@/test-utils/renderWithRouter.tsx";
 import Paginator from "@components/paginator/Paginator.tsx";
 import { act, screen } from "@testing-library/react";
 import LocationDisplay from "@/test-utils/LocationDisplay.tsx";
+import {
+  QUERY_PAGE,
+  QUERY_PAGE_SIZE,
+} from "@pages/searchPage/components/apiSearch/ApiSearch.constants.ts";
 
 const render = renderWithRouter;
 
@@ -71,7 +75,7 @@ describe("Paginator", () => {
       />,
       {
         routerOptions: {
-          initialEntries: [`/?page=4`],
+          initialEntries: [`/?${QUERY_PAGE}=4`],
         },
       },
     );
@@ -91,7 +95,7 @@ describe("Paginator", () => {
       />,
       {
         routerOptions: {
-          initialEntries: [`/?pageSize=7`],
+          initialEntries: [`/?${QUERY_PAGE_SIZE}=7`],
         },
       },
     );
@@ -119,6 +123,6 @@ describe("Paginator", () => {
       page2.click();
     });
 
-    expect(screen.getByTestId("search")).toHaveTextContent("?page=2");
+    expect(screen.getByTestId("search")).toHaveTextContent(`?${QUERY_PAGE}=2`);
   });
 });
