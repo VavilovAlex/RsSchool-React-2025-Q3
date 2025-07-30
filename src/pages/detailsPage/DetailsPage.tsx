@@ -24,6 +24,7 @@ export function DetailsPage() {
   }, []);
 
   useEffect(() => {
+    if (!detailsId) return;
     requestDetails(detailsId).catch(console.error);
   }, [detailsId, requestDetails]);
 
