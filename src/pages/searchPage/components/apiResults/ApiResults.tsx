@@ -1,16 +1,13 @@
 import type { BookSearchResponse } from "@api/book/models.ts";
 import Spinner from "@components/spinner/Spinner.tsx";
-import TextLink from "@components/link/TextLink.tsx";
 import {
   DEFAULT_PAGE,
   DEFAULT_PAGE_SIZE,
   QUERY_PAGE,
   QUERY_PAGE_SIZE,
 } from "@pages/searchPage/components/apiSearch/ApiSearch.constants.ts";
-import { useSearchParams } from "react-router";
-import { QUERY_DETAILS_ID } from "@pages/detailsPage/DetailsPage.constants.ts";
 import Paginator from "@components/paginator/Paginator.tsx";
-import { type MouseEvent } from "react";
+import ApiResult from "@pages/searchPage/components/apiResults/apiResult/ApiResult.tsx";
 
 interface Props {
   result: BookSearchResponse | null;
@@ -18,16 +15,6 @@ interface Props {
 
 export default function ApiResults(props: Props) {
   const { result } = props;
-
-  const setSearchParams = useSearchParams()[1];
-
-  const openDetails = (e: MouseEvent<HTMLTableRowElement>, id: string) => {
-    e.stopPropagation();
-    setSearchParams((params) => {
-      params.set(QUERY_DETAILS_ID, id);
-      return params;
-    });
-  };
 
   const totalCount = result == null ? 0 : result.numFound;
 
@@ -64,25 +51,7 @@ export default function ApiResults(props: Props) {
                 </tr>
               )}
               {result.books.map((book) => (
-                <tr
-                  role={"listitem"}
-                  key={book.key}
-                  onClick={(e) => openDetails(e, book.key)}
-                >
-                  <td>{book.title}</td>
-                  <td>{book.firstPublishYear}</td>
-                  <td>
-                    {book.authors.map((author) => author.name).join(", ")}
-                  </td>
-                  <td>
-                    <TextLink
-                      href={"https://openlibrary.org/" + book.key}
-                      target={"_blank"}
-                    >
-                      Link
-                    </TextLink>
-                  </td>
-                </tr>
+                <ApiResult book={book} key={book.key} />
               ))}
             </>
           )}
