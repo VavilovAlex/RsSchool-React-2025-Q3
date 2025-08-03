@@ -27,9 +27,13 @@ export const apiResultsSlice = createSlice({
         (b) => b.key !== book.key,
       );
     },
+    clearBookSelection: (state) => {
+      state.selectedBooks = [];
+    },
   },
 });
 
-export const { selectBook, unselectBook } = apiResultsSlice.actions;
+export const { selectBook, unselectBook, clearBookSelection } =
+  apiResultsSlice.actions;
 
 export default apiResultsSlice.reducer;
