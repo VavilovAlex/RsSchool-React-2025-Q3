@@ -15,4 +15,5 @@ export function setupStore(preloadedState?: Partial<RootState>) {
 export const store = setupStore();
 
 export type RootState = ReturnType<typeof rootReducer>;
+export type AppStoreType = typeof store;
 export type AppDispatch = typeof store.dispatch;
