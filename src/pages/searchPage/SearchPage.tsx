@@ -6,6 +6,7 @@ import Section from "@components/section/Section.tsx";
 import type { BookSearchResponse } from "@api/book/models.ts";
 import type { HttpError } from "@shared/errors/httpError.ts";
 import { useState } from "react";
+import SelectionState from "@pages/searchPage/components/selectionState/SelectionState.tsx";
 
 export default function SearchPage() {
   const [response, setResponse] = useState<BookSearchResponse | null>(null);
@@ -42,6 +43,7 @@ export default function SearchPage() {
       <Section title={"Results"}>
         <ApiResults result={response} />
       </Section>
+      <SelectionState />
     </div>
   );
 }
