@@ -24,7 +24,11 @@ export default function CheckBox({
     }
   };
 
-  const className = "w-4 h-4 cursor-pointer";
+  const className = clsx(
+    "h-4 w-4 rounded",
+    "accent-blue-600",
+    "dark:accent-blue-400",
+  );
 
   return (
     <input

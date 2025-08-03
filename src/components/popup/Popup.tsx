@@ -13,8 +13,8 @@ export default function Popup({ isOpen, title, children }: Props) {
       <div
         data-testid="popup"
         className={clsx(
-          "pointer-events-auto",
-          "p-4 bg-gray-100 m-4 rounded",
+          "pointer-events-auto p-4 m-4 rounded",
+          "bg-gray-100 dark:bg-gray-800",
           "transform transition-all duration-300 ease-out",
           isOpen ? "translate-y-0 opacity-100" : "translate-y-full opacity-0",
         )}
