@@ -23,6 +23,7 @@ export default function ApiResults(props: Props) {
       <table className={"default-table"}>
         <thead>
           <tr>
+            <th>#</th>
             <th>Name</th>
             <th>Year</th>
             <th>Authors</th>
