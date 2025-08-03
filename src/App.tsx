@@ -13,14 +13,16 @@ export default function App() {
     <>
       <ErrorBoundary>
         <HashRouter>
-          <Navbar />
-          <Routes>
-            <Route path={ROUTES.Home()} element={<SearchPageLayout />}>
-              <Route index element={<DetailsPage />} />
-            </Route>
-            <Route path={ROUTES.About} element={<About />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <div className={"w-screen h-screen flex flex-col overflow-hidden"}>
+            <Navbar />
+            <Routes>
+              <Route path={ROUTES.Home()} element={<SearchPageLayout />}>
+                <Route index element={<DetailsPage />} />
+              </Route>
+              <Route path={ROUTES.About} element={<About />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
         </HashRouter>
       </ErrorBoundary>
     </>

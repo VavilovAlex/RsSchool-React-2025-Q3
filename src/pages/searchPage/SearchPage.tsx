@@ -31,7 +31,7 @@ export default function SearchPage() {
   const httpError = searchError as HttpError;
 
   return (
-    <div className={"flex flex-col gap-4 max-w-[1200px] w-full"}>
+    <div className={"flex flex-col gap-4 max-w-[1200px] w-full overflow-auto"}>
       <Section title={"Search"}>
         <ApiSearch onUpdate={handleSearchUpdate} />
       </Section>
@@ -40,7 +40,7 @@ export default function SearchPage() {
           Search failed with code: {httpError.statusCode}
         </Section>
       )}
-      <Section title={"Results"}>
+      <Section title={"Results"} overflow={true}>
         <ApiResults result={response} />
       </Section>
       <SelectionState />

@@ -19,45 +19,47 @@ export default function ApiResults(props: Props) {
   const totalCount = result == null ? 0 : result.numFound;
 
   return (
-    <div>
-      <table className={"default-table"}>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Year</th>
-            <th>Authors</th>
-            <th>Open library</th>
-          </tr>
-        </thead>
-        <tbody>
-          {result == null ? (
+    <div className={"flex flex-col h-full overflow-auto"}>
+      <div className={"overflow-auto"}>
+        <table className={"default-table"}>
+          <thead>
             <tr>
-              <td colSpan={4}>
-                <div
-                  role={"spinner"}
-                  className={"flex justify-center items-center mt-4"}
-                >
-                  <Spinner />
-                </div>
-              </td>
+              <th>#</th>
+              <th>Name</th>
+              <th>Year</th>
+              <th>Authors</th>
+              <th>Open library</th>
             </tr>
-          ) : (
-            <>
-              {result.books.length === 0 && (
-                <tr>
-                  <td colSpan={4} className={"italic"}>
-                    No results found.
-                  </td>
-                </tr>
-              )}
-              {result.books.map((book) => (
-                <ApiResult book={book} key={book.key} />
-              ))}
-            </>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {result == null ? (
+              <tr>
+                <td colSpan={4}>
+                  <div
+                    role={"spinner"}
+                    className={"flex justify-center items-center mt-4"}
+                  >
+                    <Spinner />
+                  </div>
+                </td>
+              </tr>
+            ) : (
+              <>
+                {result.books.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className={"italic"}>
+                      No results found.
+                    </td>
+                  </tr>
+                )}
+                {result.books.map((book) => (
+                  <ApiResult book={book} key={book.key} />
+                ))}
+              </>
+            )}
+          </tbody>
+        </table>
+      </div>
       <Paginator
         queryPage={QUERY_PAGE}
         queryPageSize={QUERY_PAGE_SIZE}

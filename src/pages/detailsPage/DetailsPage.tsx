@@ -49,7 +49,7 @@ export function DetailsPage() {
 
   return (
     <div className={"flex flex-col gap-4 max-w-[1200px] w-full"}>
-      <Section title={"Details"}>
+      <Section title={"Details"} overflow={true}>
         <div>
           <div className={"text-xl bg-gray-100 p-4"}>{details.title}</div>
           <div className={"p-4"}>{details.description}</div>

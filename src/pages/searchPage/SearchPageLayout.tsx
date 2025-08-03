@@ -15,7 +15,7 @@ export default function SearchPageLayout() {
   return (
     <div
       data-testid="search-page-layout"
-      className={"flex justify-center w-full h-full p-4 gap-5"}
+      className={"flex justify-center w-full h-full p-4 gap-5 overflow-auto"}
       onClick={closeDetails}
     >
       <SearchPage />
