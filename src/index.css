@@ -6,6 +6,18 @@
   overflow: hidden;
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  html {
+    @apply bg-white text-gray-900;
+  }
+
+  html.dark {
+    @apply bg-gray-900 text-gray-100;
+  }
+}
+
 @layer components {
   .default-table {
     @apply table-auto w-full border-collapse;
@@ -13,14 +25,18 @@
     thead {
       td,
       th {
-        @apply px-4 py-2 bg-gray-100 text-left text-sm font-semibold text-gray-700;
+        @apply px-4 py-2 text-left text-sm font-semibold bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-200;
+      }
+
+      tr {
+        @apply sticky top-0;
       }
     }
 
     tbody {
       td,
       th {
-        @apply px-4 py-2 border-t border-gray-200 text-gray-600;
+        @apply px-4 py-2 border-t border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-300;
       }
     }
   }

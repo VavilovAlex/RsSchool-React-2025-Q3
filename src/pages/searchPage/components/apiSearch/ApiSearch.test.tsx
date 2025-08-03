@@ -7,7 +7,7 @@ import {
   DEFAULT_PAGE_SIZE,
   LOCALSTORAGE_SEARCH_KEY,
 } from "./ApiSearch.constants.ts";
-import renderWithRouter from "@/test-utils/renderWithRouter.tsx";
+import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
 import type { BookSearchResponse } from "@api/book/models.ts";
 import { searchBooks } from "@api/book/client.ts";
 
@@ -15,7 +15,7 @@ vi.mock("@api/book/client");
 
 const mockedSearchBooks = vi.mocked(searchBooks);
 
-const render = renderWithRouter;
+const render = renderWithRouterAndRedux;
 
 const FAKE_RESPONSE: BookSearchResponse = {
   books: [

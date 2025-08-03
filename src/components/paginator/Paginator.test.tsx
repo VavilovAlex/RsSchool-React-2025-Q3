@@ -1,5 +1,5 @@
 import { beforeEach, describe } from "vitest";
-import renderWithRouter from "@/test-utils/renderWithRouter.tsx";
+import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
 import Paginator from "@components/paginator/Paginator.tsx";
 import { act, screen } from "@testing-library/react";
 import LocationDisplay from "@/test-utils/LocationDisplay.tsx";
@@ -8,7 +8,7 @@ import {
   QUERY_PAGE_SIZE,
 } from "@pages/searchPage/components/apiSearch/ApiSearch.constants.ts";
 
-const render = renderWithRouter;
+const render = renderWithRouterAndRedux;
 
 describe("Paginator", () => {
   beforeEach(() => {

@@ -1,4 +1,4 @@
-import renderWithRouter from "@/test-utils/renderWithRouter.tsx";
+import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
 import { describe, it, expect } from "vitest";
 import { act, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -6,7 +6,7 @@ import SearchPageLayout from "@pages/searchPage/SearchPageLayout.tsx";
 import LocationDisplay from "@/test-utils/LocationDisplay.tsx";
 import { QUERY_DETAILS_ID } from "@pages/detailsPage/DetailsPage.constants.ts";
 
-const render = renderWithRouter;
+const render = renderWithRouterAndRedux;
 
 describe("SearchPageLayout", () => {
   it("renders Search and Results sections", () => {

@@ -1,4 +1,4 @@
-import renderWithRouter from "@/test-utils/renderWithRouter.tsx";
+import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
 import { describe, vi } from "vitest";
 import { DetailsPage } from "@pages/detailsPage/DetailsPage.tsx";
 import { act, screen, waitFor } from "@testing-library/react";
@@ -6,7 +6,7 @@ import { QUERY_DETAILS_ID } from "@pages/detailsPage/DetailsPage.constants.ts";
 import { getBook } from "@api/book/client.ts";
 import type { BookDetailsResponse } from "@api/book/models.ts";
 
-const render = renderWithRouter;
+const render = renderWithRouterAndRedux;
 
 vi.mock("@api/book/client");
 

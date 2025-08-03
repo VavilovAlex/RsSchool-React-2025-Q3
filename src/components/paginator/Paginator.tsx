@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { useMemo } from "react";
 import type { PaginationOptions } from "@shared/types/pagination.ts";
 import { parseIntOrDefault } from "@shared/utils/parse.ts";
@@ -23,8 +23,7 @@ export default function Paginator(props: Props) {
     maxPages = 10,
   } = props;
 
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const pagination = useMemo<PaginationOptions>(
     () => ({
@@ -61,9 +60,11 @@ export default function Paginator(props: Props) {
   }, [totalPages, pagination.page, maxPages]);
 
   const handlePageClick = (pageNum: number) => {
-    searchParams.set(queryPage, String(pageNum));
-    searchParams.set(queryPageSize, String(pagination.pageSize));
-    navigate({ search: searchParams.toString() });
+    setSearchParams((params) => {
+      params.set(queryPage, String(pageNum));
+      params.set(queryPageSize, String(pagination.pageSize));
+      return params;
+    });
   };
 
   return (
