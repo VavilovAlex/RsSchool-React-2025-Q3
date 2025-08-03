@@ -34,10 +34,12 @@ export default function ApiResults(props: Props) {
           <tbody>
             {result == null ? (
               <tr>
-                <td colSpan={4}>
+                <td colSpan={5}>
                   <div
                     role={"spinner"}
-                    className={"flex justify-center items-center mt-4"}
+                    className={
+                      "flex justify-center items-center mt-4 h-[200px]"
+                    }
                   >
                     <Spinner />
                   </div>
