@@ -7,7 +7,7 @@ import {
   QUERY_PAGE,
   QUERY_PAGE_SIZE,
 } from "@pages/searchPage/components/apiSearch/ApiSearch.constants.ts";
-import { useSearchParams, useNavigate } from "react-router";
+import { useSearchParams } from "react-router";
 import { QUERY_DETAILS_ID } from "@pages/detailsPage/DetailsPage.constants.ts";
 import Paginator from "@components/paginator/Paginator.tsx";
 import { type MouseEvent } from "react";
@@ -19,13 +19,14 @@ interface Props {
 export default function ApiResults(props: Props) {
   const { result } = props;
 
-  const [searchParams] = useSearchParams();
+  const setSearchParams = useSearchParams()[1];
 
-  const navigate = useNavigate();
   const openDetails = (e: MouseEvent<HTMLTableRowElement>, id: string) => {
     e.stopPropagation();
-    searchParams.set(QUERY_DETAILS_ID, id);
-    navigate({ search: searchParams.toString() });
+    setSearchParams((params) => {
+      params.set(QUERY_DETAILS_ID, id);
+      return params;
+    });
   };
 
   const totalCount = result == null ? 0 : result.numFound;
