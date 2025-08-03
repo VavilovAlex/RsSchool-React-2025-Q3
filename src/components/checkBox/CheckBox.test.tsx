@@ -41,4 +41,50 @@ describe("CheckBox", () => {
 
     expect(onChange).toHaveBeenCalled();
   });
+
+  it("stop click propagation when stopClickPropagation prop is true", () => {
+    const checked = false;
+    const onChange = vi.fn();
+    const parentOnClick = vi.fn();
+
+    render(
+      <div onClick={parentOnClick}>
+        <CheckBox
+          checked={checked}
+          onChange={onChange}
+          stopClickPropagation={true}
+        />
+      </div>,
+    );
+
+    act(() => {
+      screen.getByRole("checkbox").click();
+    });
+
+    expect(onChange).toHaveBeenCalled();
+    expect(parentOnClick).not.toHaveBeenCalled();
+  });
+
+  it("lets click propagate when stopClickPropagation prop is false", () => {
+    const checked = false;
+    const onChange = vi.fn();
+    const parentOnClick = vi.fn();
+
+    render(
+      <div onClick={parentOnClick}>
+        <CheckBox
+          checked={checked}
+          onChange={onChange}
+          stopClickPropagation={false}
+        />
+      </div>,
+    );
+
+    act(() => {
+      screen.getByRole("checkbox").click();
+    });
+
+    expect(onChange).toHaveBeenCalled();
+    expect(parentOnClick).toHaveBeenCalled();
+  });
 });

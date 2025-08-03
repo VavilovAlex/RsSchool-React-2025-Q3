@@ -1,16 +1,27 @@
-import { clsx } from "clsx";
+import { type ClassValue, clsx } from "clsx";
+import type { ChangeEventHandler, MouseEventHandler } from "react";
 
 interface CheckBoxProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
-  className?: string;
+  className?: ClassValue;
+  stopClickPropagation?: boolean;
 }
 
-export default function CheckBox(props: CheckBoxProps) {
-  const { checked, onChange, className: propsClassName } = props;
-
-  const handleOnClick = () => {
+export default function CheckBox({
+  checked,
+  onChange,
+  className: propsClassName,
+  stopClickPropagation = true,
+}: CheckBoxProps) {
+  const handleOnChange: ChangeEventHandler<HTMLInputElement> = () => {
     onChange(!checked);
+  };
+
+  const handleOnClick: MouseEventHandler<HTMLInputElement> = (e) => {
+    if (stopClickPropagation) {
+      e.stopPropagation();
+    }
   };
 
   const className = "w-4 h-4 cursor-pointer";
@@ -19,7 +30,8 @@ export default function CheckBox(props: CheckBoxProps) {
     <input
       type="checkbox"
       checked={checked}
-      onChange={handleOnClick}
+      onChange={handleOnChange}
+      onClick={handleOnClick}
       className={clsx(className, propsClassName)}
     />
   );
