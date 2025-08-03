@@ -1,10 +1,10 @@
-import renderWithRouter from "@/test-utils/renderWithRouter.tsx";
+import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
 import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SearchPage from "./SearchPage";
 
-const render = renderWithRouter;
+const render = renderWithRouterAndRedux;
 
 describe("SearchPage", () => {
   it("renders Search and Results sections", () => {

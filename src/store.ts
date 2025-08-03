@@ -1,11 +1,18 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import apiResultsReducer from "@pages/searchPage/components/apiResults/apiResultsSlice.ts";
 
-export const store = configureStore({
-  reducer: {
-    apiResults: apiResultsReducer,
-  },
+const rootReducer = combineReducers({
+  apiResults: apiResultsReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export function setupStore(preloadedState?: Partial<RootState>) {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+  });
+}
+
+export const store = setupStore();
+
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
