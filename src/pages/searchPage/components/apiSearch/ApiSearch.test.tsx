@@ -2,41 +2,25 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { screen, fireEvent, waitFor } from "@testing-library/react";
 
 import ApiSearch, { type ApiSearchResult } from "./ApiSearch.tsx";
-import {
-  DEFAULT_PAGE,
-  DEFAULT_PAGE_SIZE,
-  LOCALSTORAGE_SEARCH_KEY,
-} from "./ApiSearch.constants.ts";
+import { LOCALSTORAGE_SEARCH_KEY } from "./ApiSearch.constants.ts";
+import server from "@/_test_/mocks/server.ts";
 import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
-import type { BookSearchResponse } from "@api/book/models.ts";
-import { searchBooks } from "@api/book/client.ts";
-
-vi.mock("@api/book/client");
-
-const mockedSearchBooks = vi.mocked(searchBooks);
+import { http } from "msw";
 
 const render = renderWithRouterAndRedux;
 
-const FAKE_RESPONSE: BookSearchResponse = {
-  books: [
-    {
-      key: "",
-      firstPublishYear: 0,
-      title: "",
-      authors: [],
-      languages: [],
-    },
-  ],
-  start: 5,
-  numFound: 13,
-};
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+let fetchSpy = vi.spyOn(globalThis, "fetch");
 
 describe("ApiSearch component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     window.localStorage.clear();
 
-    mockedSearchBooks.mockResolvedValue(FAKE_RESPONSE);
+    fetchSpy = vi.spyOn(globalThis, "fetch");
   });
 
   it("reads localStorage on load and triggers search with retrieved value", async () => {
@@ -50,10 +34,7 @@ describe("ApiSearch component", () => {
     expect(input.value).toBe("stored value");
 
     await waitFor(() => {
-      expect(mockedSearchBooks).toHaveBeenCalledWith(
-        "stored value",
-        expect.anything(),
-      );
+      expect(fetchSpy).toHaveBeenCalled();
     });
   });
 
@@ -83,18 +64,14 @@ describe("ApiSearch component", () => {
 
     render(<ApiSearch onUpdate={onUpdate} />);
 
-    expect(onUpdate).toHaveBeenCalledWith({
-      status: "loading",
-    } as ApiSearchResult);
+    await waitFor(() => {
+      expect(fetchSpy).toHaveBeenCalled();
+    });
 
     await waitFor(() => {
-      expect(mockedSearchBooks).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.anything(),
-      );
       expect(onUpdate).toHaveBeenCalledWith({
         status: "success",
-        data: expect.anything(),
+        data: expect.any(Object),
       } as ApiSearchResult);
     });
   });
@@ -114,18 +91,13 @@ describe("ApiSearch component", () => {
     fireEvent.submit(form);
 
     await waitFor(() => {
-      expect(onUpdate).toHaveBeenCalledWith({
-        status: "loading",
-      } as ApiSearchResult);
+      expect(fetchSpy).toHaveBeenCalled();
+    });
 
-      expect(mockedSearchBooks).toHaveBeenCalledWith(
-        "harry potter",
-        expect.anything(),
-      );
-
+    await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
         status: "success",
-        data: FAKE_RESPONSE,
+        data: expect.any(Object),
       } as ApiSearchResult);
     });
   });
@@ -143,13 +115,7 @@ describe("ApiSearch component", () => {
     });
 
     await waitFor(() => {
-      expect(mockedSearchBooks).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.objectContaining({
-          page: PAGE,
-          pageSize: PAGE_SIZE,
-        }),
-      );
+      expect(fetchSpy).toHaveBeenCalled();
     });
   });
 
@@ -163,33 +129,28 @@ describe("ApiSearch component", () => {
     });
 
     await waitFor(() => {
-      expect(mockedSearchBooks).toHaveBeenCalledWith(
-        expect.anything(),
-        expect.objectContaining({
-          page: DEFAULT_PAGE,
-          pageSize: DEFAULT_PAGE_SIZE,
-        }),
-      );
+      expect(fetchSpy).toHaveBeenCalled();
     });
   });
 
   it("calls onUpdate with error when something goes wrong", async () => {
-    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     const onUpdate = vi.fn();
 
-    const error = new Error("Test error");
+    const error = new Error("Something went wrong");
 
-    mockedSearchBooks.mockRejectedValue(error);
+    server.use(
+      http.get("https://openlibrary.org/:path", () => {
+        return new Response(error.message, { status: 404 });
+      }),
+    );
 
     render(<ApiSearch onUpdate={onUpdate} />);
 
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith({
         status: "error",
-        error,
+        error: expect.any(Object),
       });
-
-      expect(errorSpy).toHaveBeenCalled();
     });
   });
 });

@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
 import TextInput from "../../../../components/textInput/TextInput.tsx";
-import { searchBooks } from "@api/book/client.ts";
 import type { PaginationOptions } from "@shared/types/pagination.ts";
 import type { BookSearchResponse } from "@api/book/models.ts";
 import { useSearchParams } from "react-router";
@@ -14,6 +13,7 @@ import {
 import { parseIntOrDefault } from "@shared/utils/parse.ts";
 import Button from "@components/button/Button.tsx";
 import { useLocalStorage } from "@/hooks/useLocalStorage.tsx";
+import { useSearchBooksQuery } from "@api/book/bookApi.ts";
 
 interface Props {
   onUpdate: (response: ApiSearchResult) => void;
@@ -58,40 +58,50 @@ export default function ApiSearch({ onUpdate }: Props) {
     [page, pageSize],
   );
 
-  const search = useCallback(
-    async (text: string, pagination: PaginationOptions) => {
-      const normalizedSearchText = text.trim();
-
-      setSearchText(normalizedSearchText);
-
-      setStoredSearchText(normalizedSearchText);
-
-      setApiSearchResult({ status: "loading" });
-
-      try {
-        const result = await searchBooks(normalizedSearchText, pagination);
-        setApiSearchResult({ status: "success", data: result });
-      } catch (e) {
-        console.error(e);
-        setApiSearchResult({
-          status: "error",
-          error: e as Error,
-        });
-      }
-    },
-
-    [setStoredSearchText],
+  const queryArg = useMemo(
+    () => ({
+      q: submittedSearchText,
+      page: pagination.page,
+      limit: pagination.pageSize,
+    }),
+    [submittedSearchText, pagination],
   );
 
+  const { data, isLoading, isFetching, isError, error } =
+    useSearchBooksQuery(queryArg);
+
   useEffect(() => {
-    search(submittedSearchText, pagination).catch(console.error);
-  }, [pagination, submittedSearchText, search]);
+    if (isLoading || isFetching) {
+      setApiSearchResult({ status: "loading" });
+    } else if (isError) {
+      const errorMessage =
+        "Error fetching data: " +
+        ("error" in error
+          ? error.error
+          : "message" in error
+            ? error.message
+            : "status" in error
+              ? error.status
+              : "Unknown error");
+
+      setApiSearchResult({
+        status: "error",
+        error: new Error(errorMessage),
+      });
+    } else if (data) {
+      setApiSearchResult({ status: "success", data });
+    }
+  }, [isLoading, isFetching, isError, data, error]);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const normalized = searchText.trim();
+    setSubmittedSearchText(normalized);
+    setStoredSearchText(normalized);
+  };
 
   return (
-    <form
-      aria-label="Search books"
-      onSubmit={() => setSubmittedSearchText(searchText)}
-    >
+    <form aria-label="Search books" onSubmit={handleSubmit}>
       <div className="flex flex-row w-full gap-1">
         <TextInput
           className={"w-full"}

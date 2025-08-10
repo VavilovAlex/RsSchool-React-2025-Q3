@@ -3,14 +3,15 @@ import { describe, vi } from "vitest";
 import { DetailsPage } from "@pages/detailsPage/DetailsPage.tsx";
 import { act, screen, waitFor } from "@testing-library/react";
 import { QUERY_DETAILS_ID } from "@pages/detailsPage/DetailsPage.constants.ts";
-import { getBook } from "@api/book/client.ts";
-import type { BookDetailsResponse } from "@api/book/models.ts";
 
+import server, { FAKE_DETAILS_API_RESPONSE } from "@/_test_/mocks/server.ts";
+
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+const details = FAKE_DETAILS_API_RESPONSE;
 const render = renderWithRouterAndRedux;
-
-vi.mock("@api/book/client");
-
-const mockedGetBook = vi.mocked(getBook);
 
 describe("DetailsPage", () => {
   beforeEach(() => {
@@ -38,38 +39,20 @@ describe("DetailsPage", () => {
   it("renders details retrieved from api", async () => {
     const fakeKey = "fakeKey";
 
-    const details: BookDetailsResponse = {
-      key: fakeKey,
-      subjects: [],
-      title: "My Book",
-      description: "My Book Description",
-    };
-
-    mockedGetBook.mockResolvedValue(details);
-
     render(<DetailsPage />, {
       routerOptions: { initialEntries: [`/?${QUERY_DETAILS_ID}=${fakeKey}`] },
     });
 
     await waitFor(() => {
       expect(screen.getByText(details.title)).toBeInTheDocument();
-      expect(screen.getByText(details.description || "")).toBeInTheDocument();
-
-      expect(mockedGetBook).toHaveBeenCalledWith(fakeKey);
+      expect(
+        screen.getByText(details.description.toString()),
+      ).toBeInTheDocument();
     });
   });
 
   it("closes on close button click", async () => {
     const fakeKey = "fakeKey";
-
-    const details: BookDetailsResponse = {
-      key: fakeKey,
-      subjects: [],
-      title: "My Book",
-      description: "My Book Description",
-    };
-
-    mockedGetBook.mockResolvedValue(details);
 
     render(<DetailsPage />, {
       routerOptions: { initialEntries: [`/?${QUERY_DETAILS_ID}=${fakeKey}`] },

@@ -4,7 +4,6 @@ import ApiSearch, {
 import ApiResults from "./components/apiResults/ApiResults.tsx";
 import Section from "@components/section/Section.tsx";
 import type { BookSearchResponse } from "@api/book/models.ts";
-import type { HttpError } from "@shared/errors/httpError.ts";
 import { useState } from "react";
 import SelectionState from "@pages/searchPage/components/selectionState/SelectionState.tsx";
 
@@ -28,16 +27,17 @@ export default function SearchPage() {
     }
   };
 
-  const httpError = searchError as HttpError;
-
   return (
     <div className={"flex flex-col gap-4 max-w-[1200px] w-full overflow-auto"}>
       <Section title={"Search"}>
         <ApiSearch onUpdate={handleSearchUpdate} />
       </Section>
       {searchError && (
-        <Section title={"Search error"} className={"bg-red-100"}>
-          Search failed with code: {httpError.statusCode}
+        <Section
+          title={"Search error"}
+          className={"bg-red-100 dark:bg-red-900"}
+        >
+          Search failed: {searchError.message}
         </Section>
       )}
       <Section title={"Results"} overflow={true}>
