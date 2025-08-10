@@ -18,6 +18,7 @@ export interface SearchBooksArgs {
 export const bookApi = createApi({
   reducerPath: "bookApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://openlibrary.org" }),
+  tagTypes: ["Book", "Search"],
   endpoints: (builder) => ({
     searchBooks: builder.query<BookSearchResponse, SearchBooksArgs>({
       query: ({ q, page, limit }) => {
@@ -29,6 +30,26 @@ export const bookApi = createApi({
       },
       transformResponse: (response: ApiBookSearchResponse) =>
         fromApiResponse(response),
+      keepUnusedDataFor: 300,
+      providesTags: (result, _, arg) => {
+        const searchId = `${arg.q}|${arg.page}|${arg.limit}`;
+
+        const baseTags = [
+          { type: "Search" as const, id: searchId },
+          { type: "Book" as const, id: "LIST" },
+        ];
+
+        if (result && Array.isArray(result.books) && result.books.length > 0) {
+          const bookTags = result.books.map((book) => ({
+            type: "Book" as const,
+            id: book.key,
+          }));
+
+          return [...baseTags, ...bookTags];
+        }
+
+        return baseTags;
+      },
     }),
     getBook: builder.query<BookDetailsResponse, string>({
       query: (key) => {
@@ -37,8 +58,23 @@ export const bookApi = createApi({
       },
       transformResponse: (response: ApiBookDetailsResponse) =>
         fromBookDetailsResponse(response),
+      keepUnusedDataFor: 300,
+      providesTags: (_book, _error, id) => {
+        return [
+          { type: "Book" as const, id },
+          { type: "Book" as const, id: "LIST" },
+        ];
+      },
+    }),
+    invalidateBooks: builder.mutation<null, null>({
+      queryFn: () => ({ data: null }),
+      invalidatesTags: [{ type: "Book", id: "LIST" }],
     }),
   }),
 });
 
-export const { useSearchBooksQuery, useGetBookQuery } = bookApi;
+export const {
+  useSearchBooksQuery,
+  useGetBookQuery,
+  useInvalidateBooksMutation,
+} = bookApi;
