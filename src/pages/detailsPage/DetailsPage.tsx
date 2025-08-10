@@ -1,9 +1,8 @@
 import { useSearchParams } from "react-router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { QUERY_DETAILS_ID } from "@pages/detailsPage/DetailsPage.constants.ts";
 import Section from "@components/section/Section.tsx";
-import type { BookDetailsResponse } from "@api/book/models.ts";
-import { getBook } from "@api/book/client.ts";
+import { useGetBookQuery } from "@api/book/bookApi.ts";
 import Spinner from "@components/spinner/Spinner.tsx";
 import Button from "@components/button/Button.tsx";
 
@@ -14,18 +13,13 @@ export function DetailsPage() {
     return searchParams.get(QUERY_DETAILS_ID) || "";
   }, [searchParams]);
 
-  const [details, setDetails] = useState<BookDetailsResponse | null>(null);
-
-  const requestDetails = useCallback(async (key: string) => {
-    setDetails(null);
-    const book = await getBook(key);
-    setDetails(book);
-  }, []);
-
-  useEffect(() => {
-    if (!detailsId) return;
-    requestDetails(detailsId).catch(console.error);
-  }, [detailsId, requestDetails]);
+  const {
+    data: details,
+    isLoading,
+    isFetching,
+  } = useGetBookQuery(detailsId, {
+    skip: !detailsId,
+  });
 
   const closeDetails = () => {
     setSearchParams((params) => {
@@ -36,7 +30,7 @@ export function DetailsPage() {
 
   if (!detailsId) return;
 
-  if (!details)
+  if (isLoading || isFetching || !details)
     return (
       <div className={"flex flex-col gap-4 max-w-[1200px] w-full"}>
         <Section title={"Details"}>
