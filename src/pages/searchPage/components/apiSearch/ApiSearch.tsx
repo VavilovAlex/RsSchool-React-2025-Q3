@@ -14,6 +14,8 @@ import { parseIntOrDefault } from "@shared/utils/parse.ts";
 import Button from "@components/button/Button.tsx";
 import { useLocalStorage } from "@/hooks/useLocalStorage.tsx";
 import { useSearchBooksQuery } from "@api/book/bookApi.ts";
+import type { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import type { SerializedError } from "@reduxjs/toolkit";
 
 interface Props {
   onUpdate: (response: ApiSearchResult) => void;
@@ -22,7 +24,7 @@ interface Props {
 export type ApiSearchResult =
   | { status: "loading" }
   | { status: "success"; data: BookSearchResponse }
-  | { status: "error"; error: Error };
+  | { status: "error"; error: FetchBaseQueryError | SerializedError };
 
 export default function ApiSearch({ onUpdate }: Props) {
   const [storedSearchText, setStoredSearchText] = useLocalStorage<string>(
@@ -76,7 +78,7 @@ export default function ApiSearch({ onUpdate }: Props) {
     } else if (isError) {
       setApiSearchResult({
         status: "error",
-        error: (error as Error) || new Error("Unknown error"),
+        error: error,
       });
     } else if (data) {
       setApiSearchResult({ status: "success", data });
