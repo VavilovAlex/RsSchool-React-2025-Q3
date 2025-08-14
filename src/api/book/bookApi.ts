@@ -26,6 +26,7 @@ export const bookApi = createApi({
         params.set("q", q.trim() === "" ? "*" : q.trim());
         params.set("page", String(page));
         params.set("limit", String(limit));
+        params.set("sort", "rating");
         return `/search.json?${params.toString()}`;
       },
       transformResponse: (response: ApiBookSearchResponse) =>
