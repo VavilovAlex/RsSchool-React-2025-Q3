@@ -2,8 +2,8 @@ import Button from "@components/button/Button.tsx";
 import Popup from "@components/popup/Popup.tsx";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.ts";
 import { clearBookSelection } from "@components/searchPage/components/apiResults/apiResultsSlice.ts";
-import { stringifyCSV } from "@/utils/csv.ts";
 import { useDownload } from "@/hooks/useDownload.tsx";
+import { booksToCsv } from "@components/searchPage/components/selectionState/booksToCsv.ts";
 
 export default function SelectionState() {
   const [download, linkRef] = useDownload();
@@ -19,24 +19,7 @@ export default function SelectionState() {
   };
 
   const handleExport = async () => {
-    const csvContent = await stringifyCSV(selectedBooks, [
-      {
-        header: "Title",
-        selector: (row) => row.title,
-      },
-      {
-        header: "First Publish Year",
-        selector: (row) => row.firstPublishYear.toString(),
-      },
-      {
-        header: "Authors",
-        selector: (row) => row.authors.map((author) => author.name).join(", "),
-      },
-      {
-        header: "Link",
-        selector: (row) => "https://openlibrary.org/" + row.key,
-      },
-    ]);
+    const csvContent = await booksToCsv(selectedBooks);
 
     const blob = new Blob([csvContent], { type: "text/csv" });
 
