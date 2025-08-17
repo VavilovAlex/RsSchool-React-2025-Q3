@@ -2,11 +2,11 @@ import { describe, it, expect } from "vitest";
 import { act, screen } from "@testing-library/react";
 import ApiResults from "./ApiResults.tsx";
 import type { Book, BookSearchResponse } from "@api/book/models.ts";
-import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
-import LocationDisplay from "@/test-utils/LocationDisplay.tsx";
+import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
 import { QUERY_DETAILS_ID } from "@components/detailsPage/DetailsPage.constants.ts";
+import mockRouter from "next-router-mock";
 
-const render = renderWithRouterAndRedux;
+const render = renderWithRedux;
 
 describe("ApiResults", () => {
   it("shows a spinner when result is null", () => {
@@ -92,7 +92,6 @@ describe("ApiResults", () => {
     render(
       <>
         <ApiResults result={mockResult} />
-        <LocationDisplay />
       </>,
     );
 
@@ -102,8 +101,10 @@ describe("ApiResults", () => {
       title.click();
     });
 
-    expect(screen.getByTestId("search")).toHaveTextContent(
-      `?${QUERY_DETAILS_ID}=OL1`,
-    );
+    expect(mockRouter).toMatchObject({
+      query: {
+        [QUERY_DETAILS_ID]: "OL1",
+      },
+    });
   });
 });

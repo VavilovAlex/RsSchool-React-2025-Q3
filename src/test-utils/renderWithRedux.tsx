@@ -1,11 +1,9 @@
 import { type ReactElement } from "react";
 import { render, type RenderOptions } from "@testing-library/react";
-import { MemoryRouter, type MemoryRouterProps } from "react-router";
 import { Provider } from "react-redux";
 import { type RootState, setupStore, type AppStoreType } from "@/store.ts";
 
 export interface Options {
-  routerOptions?: MemoryRouterProps;
   renderOptions?: RenderOptions;
   reduxOptions?: ReduxOptions;
 }
@@ -15,7 +13,7 @@ interface ReduxOptions {
   spySetup?: (store: AppStoreType) => void;
 }
 
-export default function renderWithRouterAndRedux(
+export default function renderWithRedux(
   ui: ReactElement,
   options: Options = {},
 ) {
@@ -27,9 +25,7 @@ export default function renderWithRouterAndRedux(
 
   return {
     renderResult: render(
-      <Provider store={store}>
-        <MemoryRouter {...options.routerOptions}>{ui}</MemoryRouter>
-      </Provider>,
+      <Provider store={store}>{ui}</Provider>,
       options.renderOptions,
     ),
     store,

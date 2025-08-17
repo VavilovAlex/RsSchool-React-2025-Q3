@@ -1,12 +1,12 @@
-import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
+import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
 import { describe, it, expect } from "vitest";
 import { act, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SearchPageLayout from "@components/searchPage/SearchPageLayout.tsx";
-import LocationDisplay from "@/test-utils/LocationDisplay.tsx";
 import { QUERY_DETAILS_ID } from "@components/detailsPage/DetailsPage.constants.ts";
+import mockRouter from "next-router-mock";
 
-const render = renderWithRouterAndRedux;
+const render = renderWithRedux;
 
 describe("SearchPageLayout", () => {
   it("renders Search and Results sections", () => {
@@ -19,21 +19,19 @@ describe("SearchPageLayout", () => {
   });
 
   it("resets detailsId query parameter when clicked within", () => {
+    mockRouter.push(`/?${QUERY_DETAILS_ID}=1`);
+
     render(
       <>
         <SearchPageLayout />
-        <LocationDisplay />
       </>,
-      {
-        routerOptions: {
-          initialEntries: [`/?${QUERY_DETAILS_ID}=1`],
-        },
-      },
     );
 
-    expect(screen.getByTestId("search")).toHaveTextContent(
-      `?${QUERY_DETAILS_ID}=1`,
-    );
+    expect(mockRouter).toMatchObject({
+      query: {
+        [QUERY_DETAILS_ID]: "1",
+      },
+    });
 
     const container = screen.getByTestId("search-page-layout");
 
@@ -41,6 +39,8 @@ describe("SearchPageLayout", () => {
       container.click();
     });
 
-    expect(screen.getByTestId("search")).toHaveTextContent(``);
+    expect(mockRouter).toMatchObject({
+      query: {},
+    });
   });
 });

@@ -1,18 +1,18 @@
 import { beforeEach, describe } from "vitest";
-import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
+import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
 import Paginator from "@components/paginator/Paginator.tsx";
 import { act, screen } from "@testing-library/react";
-import LocationDisplay from "@/test-utils/LocationDisplay.tsx";
 import {
   QUERY_PAGE,
   QUERY_PAGE_SIZE,
 } from "@components/searchPage/components/apiSearch/ApiSearch.constants.ts";
+import mockRouter from "next-router-mock";
 
-const render = renderWithRouterAndRedux;
+const render = renderWithRedux;
 
 describe("Paginator", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it("render correct number of pages", () => {
@@ -64,6 +64,8 @@ describe("Paginator", () => {
   });
 
   it("reads current page from query", () => {
+    mockRouter.push(`/?${QUERY_PAGE}=4`);
+
     render(
       <Paginator
         queryPage={"page"}
@@ -73,17 +75,14 @@ describe("Paginator", () => {
         totalCount={9999}
         maxPages={1}
       />,
-      {
-        routerOptions: {
-          initialEntries: [`/?${QUERY_PAGE}=4`],
-        },
-      },
     );
 
     expect(screen.getByText("4")).toBeInTheDocument();
   });
 
   it("reads page size from query", () => {
+    mockRouter.push(`/?${QUERY_PAGE_SIZE}=7`);
+
     render(
       <Paginator
         queryPage={"page"}
@@ -93,11 +92,6 @@ describe("Paginator", () => {
         totalCount={10}
         maxPages={9999}
       />,
-      {
-        routerOptions: {
-          initialEntries: [`/?${QUERY_PAGE_SIZE}=7`],
-        },
-      },
     );
 
     expect(screen.getAllByRole("button")).toHaveLength(2);
@@ -114,7 +108,6 @@ describe("Paginator", () => {
           totalCount={9999}
           maxPages={5}
         />
-        <LocationDisplay />
       </>,
     );
 
@@ -123,6 +116,12 @@ describe("Paginator", () => {
       page2.click();
     });
 
-    expect(screen.getByTestId("search")).toHaveTextContent(`?${QUERY_PAGE}=2`);
+    expect(mockRouter).toMatchObject({
+      pathname: "/",
+      query: {
+        [QUERY_PAGE]: "2",
+        [QUERY_PAGE_SIZE]: "10",
+      },
+    });
   });
 });

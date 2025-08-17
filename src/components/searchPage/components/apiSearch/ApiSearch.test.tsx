@@ -4,10 +4,10 @@ import { screen, fireEvent, waitFor } from "@testing-library/react";
 import ApiSearch, { type ApiSearchResult } from "./ApiSearch.tsx";
 import { LOCALSTORAGE_SEARCH_KEY } from "./ApiSearch.constants.ts";
 import server from "@/_test_/mocks/server.ts";
-import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
+import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
 import { http } from "msw";
 
-const render = renderWithRouterAndRedux;
+const render = renderWithRedux;
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());

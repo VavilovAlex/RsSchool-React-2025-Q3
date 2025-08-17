@@ -1,6 +1,6 @@
-import renderWithRouterAndRedux, {
+import renderWithRedux, {
   type Options,
-} from "@/test-utils/renderWithRouterAndRedux.tsx";
+} from "@/test-utils/renderWithRedux.tsx";
 import ApiResult from "@components/searchPage/components/apiResults/apiResult/ApiResult.tsx";
 import type { Book } from "@api/book/models.ts";
 import { screen } from "@testing-library/react";
@@ -10,7 +10,7 @@ import {
   unselectBook,
 } from "@components/searchPage/components/apiResults/apiResultsSlice.ts";
 
-const render = renderWithRouterAndRedux;
+const render = renderWithRedux;
 
 const book: Book = {
   authors: [

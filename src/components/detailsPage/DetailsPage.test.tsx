@@ -1,25 +1,28 @@
-import renderWithRouterAndRedux from "@/test-utils/renderWithRouterAndRedux.tsx";
+import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
 import { describe, vi } from "vitest";
-import { DetailsPage } from "@components/detailsPage/DetailsPage.tsx";
 import { act, screen, waitFor } from "@testing-library/react";
 import { QUERY_DETAILS_ID } from "@components/detailsPage/DetailsPage.constants.ts";
 
 import server, { FAKE_DETAILS_API_RESPONSE } from "@/_test_/mocks/server.ts";
+import { DetailsPage } from "@components/detailsPage/DetailsPage.tsx";
+import mockRouter from "next-router-mock";
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 const details = FAKE_DETAILS_API_RESPONSE;
-const render = renderWithRouterAndRedux;
+const render = renderWithRedux;
 
 describe("DetailsPage", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
+  beforeEach(async () => {
+    vi.resetAllMocks();
+
+    await mockRouter.push("/");
   });
 
   it("doesn't render when no query parameter", async () => {
-    render(<DetailsPage />, { routerOptions: { initialEntries: [`/`] } });
+    render(<DetailsPage />);
 
     await waitFor(() => {
       expect(screen.queryByText("Details")).not.toBeInTheDocument();
@@ -27,9 +30,9 @@ describe("DetailsPage", () => {
   });
 
   it("renders when detailsId query parameter is present", async () => {
-    render(<DetailsPage />, {
-      routerOptions: { initialEntries: [`/?${QUERY_DETAILS_ID}=...`] },
-    });
+    await mockRouter.push(`/?${QUERY_DETAILS_ID}=...`);
+
+    render(<DetailsPage />);
 
     await waitFor(() => {
       expect(screen.getByText("Details")).toBeInTheDocument();
@@ -39,9 +42,9 @@ describe("DetailsPage", () => {
   it("renders details retrieved from api", async () => {
     const fakeKey = "fakeKey";
 
-    render(<DetailsPage />, {
-      routerOptions: { initialEntries: [`/?${QUERY_DETAILS_ID}=${fakeKey}`] },
-    });
+    await mockRouter.push(`/?${QUERY_DETAILS_ID}=${fakeKey}`);
+
+    render(<DetailsPage />);
 
     await waitFor(() => {
       expect(screen.getByText(details.title)).toBeInTheDocument();
@@ -51,12 +54,12 @@ describe("DetailsPage", () => {
     });
   });
 
-  it("closes on close button click", async () => {
+  it("removes parameter from url on close click", async () => {
     const fakeKey = "fakeKey";
 
-    render(<DetailsPage />, {
-      routerOptions: { initialEntries: [`/?${QUERY_DETAILS_ID}=${fakeKey}`] },
-    });
+    await mockRouter.push(`/?${QUERY_DETAILS_ID}=${fakeKey}`);
+
+    render(<DetailsPage />);
 
     await waitFor(() => {
       expect(screen.getByText(details.title)).toBeInTheDocument();
@@ -67,8 +70,8 @@ describe("DetailsPage", () => {
       closeButton.click();
     });
 
-    await waitFor(() => {
-      expect(screen.queryByText(details.title)).not.toBeInTheDocument();
+    expect(mockRouter).toMatchObject({
+      asPath: "/",
     });
   });
 });
