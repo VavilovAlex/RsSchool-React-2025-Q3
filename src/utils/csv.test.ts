@@ -6,8 +6,8 @@ describe("csv", () => {
     { header: "Header", selector: (row) => row },
   ];
 
-  it("should throw when no columns provided", () => {
-    expect(async () => await stringifyCSV([], [])).toThrow();
+  it("should throw when no columns provided", async () => {
+    await expect(stringifyCSV([], [])).rejects.toThrow();
   });
 
   it("should return header only no data provided", async () => {
