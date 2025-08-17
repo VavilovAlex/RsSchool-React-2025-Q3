@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, type ReactNode } from "react";
 import { useLocalStorage } from "@/hooks/useLocalStorage.tsx";
 import { ThemeContext } from "./useTheme";

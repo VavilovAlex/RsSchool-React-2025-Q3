@@ -1,8 +1,10 @@
-import { Link } from "react-router";
-import { ROUTES } from "@pages/routes.ts";
+"use client";
+
+import { ROUTES } from "@/utils/routes.ts";
 import Button from "@components/button/Button.tsx";
 import { useTheme } from "@/context/useTheme.tsx";
 import { useInvalidateBooksMutation } from "@api/book/bookApi.ts";
+import Link from "next/link";
 
 export default function Navbar() {
   const theme = useTheme();
@@ -15,8 +17,8 @@ export default function Navbar() {
       }
     >
       <div className={"flex py-4 gap-5"}>
-        <Link to={ROUTES.Home()}>Home</Link>
-        <Link to={ROUTES.About}>About</Link>
+        <Link href={ROUTES.Home()}>Home</Link>
+        <Link href={ROUTES.About}>About</Link>
       </div>
       <div className={"flex py-4 gap-5"}>
         <Button onClick={() => invalidateBooks(null)} disabled={isLoading}>

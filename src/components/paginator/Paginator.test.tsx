@@ -6,7 +6,7 @@ import LocationDisplay from "@/test-utils/LocationDisplay.tsx";
 import {
   QUERY_PAGE,
   QUERY_PAGE_SIZE,
-} from "@pages/searchPage/components/apiSearch/ApiSearch.constants.ts";
+} from "@components/searchPage/components/apiSearch/ApiSearch.constants.ts";
 
 const render = renderWithRouterAndRedux;
 

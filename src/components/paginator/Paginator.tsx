@@ -1,8 +1,8 @@
-import { useSearchParams } from "react-router";
 import { useMemo } from "react";
 import type { PaginationOptions } from "@shared/types/pagination.ts";
 import { parseIntOrDefault } from "@shared/utils/parse.ts";
 import PageButton from "@components/paginator/PageButton.tsx";
+import { useMutableSearchParams } from "@/hooks/useMutableSearchParams.tsx";
 
 interface Props {
   queryPage: string;
@@ -23,7 +23,7 @@ export default function Paginator(props: Props) {
     maxPages = 10,
   } = props;
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { searchParams, setSearchParams } = useMutableSearchParams();
 
   const pagination = useMemo<PaginationOptions>(
     () => ({
@@ -60,11 +60,10 @@ export default function Paginator(props: Props) {
   }, [totalPages, pagination.page, maxPages]);
 
   const handlePageClick = (pageNum: number) => {
-    setSearchParams((params) => {
-      params.set(queryPage, String(pageNum));
-      params.set(queryPageSize, String(pagination.pageSize));
-      return params;
-    });
+    setSearchParams([
+      { key: queryPage, value: String(pageNum) },
+      { key: queryPageSize, value: String(pagination.pageSize) },
+    ]);
   };
 
   return (

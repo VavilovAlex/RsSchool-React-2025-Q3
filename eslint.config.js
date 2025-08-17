@@ -8,7 +8,7 @@ import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
 import reactCompiler from "eslint-plugin-react-compiler";
 
 export default tseslint.config(
-  { ignores: ["dist", "coverage"] },
+  { ignores: ["dist", "coverage", ".next"] },
   {
     extends: [
       js.configs.recommended,
@@ -30,7 +30,19 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
         "warn",
-        { allowConstantExport: true },
+        {
+          allowConstantExport: true,
+          allowExportNames: [
+            "metadata",
+            "generateMetadata",
+            "generateStaticParams",
+            "revalidate",
+            "dynamic",
+            "fetchCache",
+            "runtime",
+            "preferredRegion",
+          ],
+        },
       ],
       "react-compiler/react-compiler": "error",
       ...react.configs.recommended.rules,

@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useCallback } from "react";
 
 type SetValue<T> = (value: T) => void;
@@ -7,15 +9,19 @@ export function useLocalStorage<T>(
   initialValue: T,
 ): [T, SetValue<T>] {
   const [storedValue, setStoredValue] = useState<T>(() => {
+    if (typeof window === "undefined") {
+      return initialValue;
+    }
     try {
       const item = window.localStorage.getItem(key);
 
-      let parsedValue: T | null = null;
+      if (typeof initialValue === "string") {
+        return (item as T) ?? initialValue;
+      } else if (item != null) {
+        return JSON.parse(item) as T;
+      }
 
-      if (typeof initialValue === "string") parsedValue = item as T;
-      else if (item != null) parsedValue = JSON.parse(item) as T;
-
-      return parsedValue ?? initialValue;
+      return initialValue;
     } catch (error) {
       console.error(`Error reading localStorage key “${key}”:`, error);
       return initialValue;
@@ -25,15 +31,13 @@ export function useLocalStorage<T>(
   const setValue: SetValue<T> = useCallback(
     (value) => {
       try {
-        let stringValue: string;
+        const stringValue =
+          typeof value === "string" ? value : JSON.stringify(value);
 
-        if (typeof value === "string") {
-          stringValue = value;
-        } else {
-          stringValue = JSON.stringify(value);
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem(key, stringValue);
         }
 
-        window.localStorage.setItem(key, stringValue);
         setStoredValue(value);
       } catch (error) {
         console.error(`Error setting localStorage key “${key}”:`, error);
@@ -44,14 +48,16 @@ export function useLocalStorage<T>(
 
   useEffect(() => {
     try {
+      if (typeof window === "undefined") return;
       const item = window.localStorage.getItem(key);
 
-      let parsedValue: T | null = null;
-
-      if (typeof initialValue === "string") parsedValue = item as T;
-      else if (item != null) parsedValue = JSON.parse(item) as T;
-
-      setStoredValue(parsedValue ?? initialValue);
+      if (typeof initialValue === "string") {
+        setStoredValue((item as T) ?? initialValue);
+      } else if (item != null) {
+        setStoredValue(JSON.parse(item) as T);
+      } else {
+        setStoredValue(initialValue);
+      }
     } catch (error) {
       console.error(`Error reading localStorage key “${key}”:`, error);
     }

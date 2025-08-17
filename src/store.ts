@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import apiResultsReducer from "@pages/searchPage/components/apiResults/apiResultsSlice.ts";
+import apiResultsReducer from "@components/searchPage/components/apiResults/apiResultsSlice.ts";
 import { bookApi } from "@api/book/bookApi.ts";
 
 const rootReducer = combineReducers({
