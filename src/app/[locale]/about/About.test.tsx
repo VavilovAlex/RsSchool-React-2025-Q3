@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import Page from "@/app/about/page.tsx";
+import Page from "./page.tsx";
 
 describe("About", () => {
   it("renders author name", () => {

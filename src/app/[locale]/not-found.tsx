@@ -1,4 +1,4 @@
-import NotFoundMessage from "@/app/notFound/page.tsx";
+import NotFoundMessage from "@/app/[locale]/notFound/page.tsx";
 
 export default function NotFound() {
   return <NotFoundMessage />;
