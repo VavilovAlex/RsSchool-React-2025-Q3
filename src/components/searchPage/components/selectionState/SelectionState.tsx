@@ -18,8 +18,8 @@ export default function SelectionState() {
     dispatch(clearBookSelection());
   };
 
-  const handleExport = () => {
-    const csvContent = stringifyCSV(selectedBooks, [
+  const handleExport = async () => {
+    const csvContent = await stringifyCSV(selectedBooks, [
       {
         header: "Title",
         selector: (row) => row.title,

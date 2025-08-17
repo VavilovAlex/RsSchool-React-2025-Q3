@@ -1,3 +1,5 @@
+"use server";
+
 export interface CSVColumn<T> {
   header: string;
   selector: (row: T) => string;
@@ -13,7 +15,7 @@ function stringifyRow<T>(data: T, columns: CSVColumn<T>[]): string {
   return columns.map((col) => escapeCSV(col.selector(data))).join(",");
 }
 
-export function stringifyCSV<T>(data: T[], columns: CSVColumn<T>[]) {
+export async function stringifyCSV<T>(data: T[], columns: CSVColumn<T>[]) {
   if (columns.length === 0)
     throw new Error("At least one column must be provided");
 
