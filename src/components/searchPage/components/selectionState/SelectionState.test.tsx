@@ -1,4 +1,4 @@
-import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
+import renderWithReduxAndLocale from "@/test-utils/renderWithReduxAndLocale.tsx";
 import SelectionState from "@components/searchPage/components/selectionState/SelectionState.tsx";
 import type { Book } from "@api/book/models.ts";
 import { beforeEach, expect } from "vitest";
@@ -7,7 +7,7 @@ import * as useDownloadHook from "@/hooks/useDownload.tsx";
 import userEvent from "@testing-library/user-event";
 import { clearBookSelection } from "@components/searchPage/components/apiResults/apiResultsSlice.ts";
 
-const render = renderWithRedux;
+const render = renderWithReduxAndLocale;
 
 vi.mock("@/hooks/useDownload.tsx");
 vi.mocked(useDownloadHook.useDownload).mockReturnValue([

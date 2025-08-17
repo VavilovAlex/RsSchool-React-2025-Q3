@@ -1,4 +1,4 @@
-import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
+import renderWithReduxAndLocale from "@/test-utils/renderWithReduxAndLocale.tsx";
 import { describe, it, expect } from "vitest";
 import { act, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -6,7 +6,7 @@ import SearchPageLayout from "@components/searchPage/SearchPageLayout.tsx";
 import { QUERY_DETAILS_ID } from "@components/detailsPage/DetailsPage.constants.ts";
 import mockRouter from "next-router-mock";
 
-const render = renderWithRedux;
+const render = renderWithReduxAndLocale;
 
 describe("SearchPageLayout", () => {
   it("renders Search and Results sections", () => {

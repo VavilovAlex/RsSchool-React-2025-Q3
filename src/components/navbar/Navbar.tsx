@@ -38,10 +38,10 @@ export default function Navbar() {
       </div>
       <div className={"flex py-4 gap-5"}>
         <Button onClick={() => invalidateBooks(null)} disabled={isLoading}>
-          Invalidate Book Cache
+          {t("invalidateCache")}
         </Button>
         <Button onClick={() => theme.toggle()}>
-          {theme.isDark ? "Dark Mode" : "Light Mode"}
+          {theme.isDark ? t("darkMode") : t("lightMode")}
         </Button>
         <Button onClick={toggleLocale}>{nextLocaleLabel}</Button>
       </div>

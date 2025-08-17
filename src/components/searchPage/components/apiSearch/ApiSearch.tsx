@@ -14,6 +14,7 @@ import Button from "@components/button/Button.tsx";
 import { useLocalStorage } from "@/hooks/useLocalStorage.tsx";
 import { useSearchBooksQuery } from "@api/book/bookApi.ts";
 import { useMutableSearchParams } from "@/hooks/useMutableSearchParams.tsx";
+import { useTranslations } from "next-intl";
 
 interface Props {
   onUpdate: (response: ApiSearchResult) => void;
@@ -29,6 +30,8 @@ export default function ApiSearch({ onUpdate }: Props) {
     LOCALSTORAGE_SEARCH_KEY,
     "",
   );
+
+  const t = useTranslations("SearchPage");
 
   const [submittedSearchText, setSubmittedSearchText] =
     useState(storedSearchText);
@@ -101,14 +104,14 @@ export default function ApiSearch({ onUpdate }: Props) {
   };
 
   return (
-    <form aria-label="Search books" onSubmit={handleSubmit}>
+    <form aria-label={"Search books"} onSubmit={handleSubmit}>
       <div className="flex flex-row w-full gap-1">
         <TextInput
           className={"w-full"}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <Button type={"submit"}>Search</Button>
+        <Button type={"submit"}>{t("search")}</Button>
       </div>
     </form>
   );

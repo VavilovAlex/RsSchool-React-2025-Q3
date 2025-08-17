@@ -1,4 +1,4 @@
-import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
+import renderWithReduxAndLocale from "@/test-utils/renderWithReduxAndLocale.tsx";
 import { describe, vi } from "vitest";
 import { act, screen, waitFor } from "@testing-library/react";
 import { QUERY_DETAILS_ID } from "@components/detailsPage/DetailsPage.constants.ts";
@@ -12,7 +12,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 const details = FAKE_DETAILS_API_RESPONSE;
-const render = renderWithRedux;
+const render = renderWithReduxAndLocale;
 
 describe("DetailsPage", () => {
   beforeEach(async () => {

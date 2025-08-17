@@ -2,11 +2,11 @@ import { describe, it, expect } from "vitest";
 import { act, screen } from "@testing-library/react";
 import ApiResults from "./ApiResults.tsx";
 import type { Book, BookSearchResponse } from "@api/book/models.ts";
-import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
+import renderWithReduxAndLocale from "@/test-utils/renderWithReduxAndLocale.tsx";
 import { QUERY_DETAILS_ID } from "@components/detailsPage/DetailsPage.constants.ts";
 import mockRouter from "next-router-mock";
 
-const render = renderWithRedux;
+const render = renderWithReduxAndLocale;
 
 describe("ApiResults", () => {
   it("shows a spinner when result is null", () => {

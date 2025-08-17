@@ -1,1 +1,39 @@
-{}
+{
+  "Navbar": {
+    "home": "Главная",
+    "about": "О сайте",
+    "invalidateCache": "Обновить кэш книг",
+    "darkMode": "Тёмная тема",
+    "lightMode": "Светлая тема"
+  },
+  "About": {
+    "title": "О сайте",
+    "pageTitle": "Страница \"О сайте\"",
+    "author": "Меня зовут Алекс",
+    "rsSchool": "RS School"
+  },
+  "Error": {
+    "title": "Что-то пошло не так",
+    "reload": "Перезагрузить"
+  },
+  "NotFound": {
+    "title": "404 - Страница не найдена"
+  },
+  "SearchPage": {
+    "search": "Поиск",
+    "searchError": "Ошибка поиска",
+    "searchFailed": "Не удалось выполнить поиск",
+    "results": "Результаты",
+    "thNumber": "#",
+    "thName": "Название",
+    "thYear": "Год",
+    "thAuthors": "Авторы",
+    "thOpenLibrary": "Open Library",
+    "noResults": "Ничего не найдено.",
+    "link": "Ссылка"
+  },
+  "Details": {
+    "title": "Детали",
+    "close": "Закрыть"
+  }
+}

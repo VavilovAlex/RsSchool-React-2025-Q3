@@ -1,10 +1,10 @@
-import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
+import renderWithReduxAndLocale from "@/test-utils/renderWithReduxAndLocale.tsx";
 import { describe, it, expect } from "vitest";
 import { screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import SearchPage from "./SearchPage";
 
-const render = renderWithRedux;
+const render = renderWithReduxAndLocale;
 
 describe("SearchPage", () => {
   it("renders Search and Results sections", () => {

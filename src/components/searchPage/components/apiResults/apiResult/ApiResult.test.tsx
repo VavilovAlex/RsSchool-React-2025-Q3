@@ -1,6 +1,6 @@
-import renderWithRedux, {
+import renderWithReduxAndLocale, {
   type Options,
-} from "@/test-utils/renderWithRedux.tsx";
+} from "@/test-utils/renderWithReduxAndLocale.tsx";
 import ApiResult from "@components/searchPage/components/apiResults/apiResult/ApiResult.tsx";
 import type { Book } from "@api/book/models.ts";
 import { screen } from "@testing-library/react";
@@ -10,7 +10,7 @@ import {
   unselectBook,
 } from "@components/searchPage/components/apiResults/apiResultsSlice.ts";
 
-const render = renderWithRedux;
+const render = renderWithReduxAndLocale;
 
 const book: Book = {
   authors: [

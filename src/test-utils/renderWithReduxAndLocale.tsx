@@ -1,6 +1,8 @@
 import { type ReactElement } from "react";
 import { render, type RenderOptions } from "@testing-library/react";
 import { Provider } from "react-redux";
+import { NextIntlClientProvider } from "next-intl";
+import enMessages from "../../messages/en.json";
 import { type RootState, setupStore, type AppStoreType } from "@/store.ts";
 
 export interface Options {
@@ -13,7 +15,7 @@ interface ReduxOptions {
   spySetup?: (store: AppStoreType) => void;
 }
 
-export default function renderWithRedux(
+export default function renderWithReduxAndLocale(
   ui: ReactElement,
   options: Options = {},
 ) {
@@ -25,7 +27,12 @@ export default function renderWithRedux(
 
   return {
     renderResult: render(
-      <Provider store={store}>{ui}</Provider>,
+      <NextIntlClientProvider
+        locale="en"
+        messages={enMessages as unknown as Record<string, unknown>}
+      >
+        <Provider store={store}>{ui}</Provider>
+      </NextIntlClientProvider>,
       options.renderOptions,
     ),
     store,

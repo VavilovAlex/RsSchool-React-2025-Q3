@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Button from "@components/button/Button.tsx";
+import { useTranslations } from "next-intl";
 
 export default function Error({
   error,
@@ -10,6 +11,8 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations("Error");
+
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -19,9 +22,9 @@ export default function Error({
       <div
         className={"border rounded p-4 bg-red-100 flex gap-4 justify-center"}
       >
-        <div className={"text-4xl mb-3"}>Something went wrong</div>
+        <div className={"text-4xl mb-3"}>{t("title")}</div>
         <Button onClick={() => reset()} className={"text-lg"}>
-          Reload
+          {t("reload")}
         </Button>
       </div>
     </div>

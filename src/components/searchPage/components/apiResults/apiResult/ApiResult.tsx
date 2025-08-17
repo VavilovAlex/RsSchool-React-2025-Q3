@@ -9,6 +9,7 @@ import {
   unselectBook,
 } from "@components/searchPage/components/apiResults/apiResultsSlice.ts";
 import { useMutableSearchParams } from "@/hooks/useMutableSearchParams.tsx";
+import { useTranslations } from "next-intl";
 
 interface Props {
   book: Book;
@@ -16,6 +17,8 @@ interface Props {
 
 export default function ApiResult(props: Props) {
   const { book } = props;
+
+  const t = useTranslations("SearchPage");
 
   const { setSearchParams } = useMutableSearchParams();
 
@@ -51,7 +54,7 @@ export default function ApiResult(props: Props) {
           href={"https://openlibrary.org/" + book.key}
           target={"_blank"}
         >
-          Link
+          {t("link")}
         </TextLink>
       </td>
     </tr>

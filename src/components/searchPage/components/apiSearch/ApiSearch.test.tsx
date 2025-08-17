@@ -4,10 +4,11 @@ import { screen, fireEvent, waitFor } from "@testing-library/react";
 import ApiSearch, { type ApiSearchResult } from "./ApiSearch.tsx";
 import { LOCALSTORAGE_SEARCH_KEY } from "./ApiSearch.constants.ts";
 import server from "@/_test_/mocks/server.ts";
-import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
+import renderWithReduxAndLocale from "@/test-utils/renderWithReduxAndLocale.tsx";
 import { http } from "msw";
+import mockRouter from "next-router-mock";
 
-const render = renderWithRedux;
+const render = renderWithReduxAndLocale;
 
 beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
@@ -108,11 +109,9 @@ describe("ApiSearch component", () => {
     const PAGE = 5;
     const PAGE_SIZE = 13;
 
-    render(<ApiSearch onUpdate={onUpdate} />, {
-      routerOptions: {
-        initialEntries: [`?page=${PAGE}&pageSize=${PAGE_SIZE}`],
-      },
-    });
+    await mockRouter.push(`/?page=${PAGE}&pageSize=${PAGE_SIZE}`);
+
+    render(<ApiSearch onUpdate={onUpdate} />);
 
     await waitFor(() => {
       expect(fetchSpy).toHaveBeenCalled();
@@ -122,11 +121,7 @@ describe("ApiSearch component", () => {
   it("uses default pagination when no pagination in url", async () => {
     const onUpdate = vi.fn();
 
-    render(<ApiSearch onUpdate={onUpdate} />, {
-      routerOptions: {
-        initialEntries: [`/`],
-      },
-    });
+    render(<ApiSearch onUpdate={onUpdate} />);
 
     await waitFor(() => {
       expect(fetchSpy).toHaveBeenCalled();

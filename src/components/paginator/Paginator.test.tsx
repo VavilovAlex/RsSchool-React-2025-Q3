@@ -1,5 +1,5 @@
 import { beforeEach, describe } from "vitest";
-import renderWithRedux from "@/test-utils/renderWithRedux.tsx";
+import renderWithReduxAndLocale from "@/test-utils/renderWithReduxAndLocale.tsx";
 import Paginator from "@components/paginator/Paginator.tsx";
 import { act, screen } from "@testing-library/react";
 import {
@@ -8,7 +8,7 @@ import {
 } from "@components/searchPage/components/apiSearch/ApiSearch.constants.ts";
 import mockRouter from "next-router-mock";
 
-const render = renderWithRedux;
+const render = renderWithReduxAndLocale;
 
 describe("Paginator", () => {
   beforeEach(() => {

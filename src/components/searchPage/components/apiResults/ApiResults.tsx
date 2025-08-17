@@ -8,6 +8,7 @@ import {
 } from "@components/searchPage/components/apiSearch/ApiSearch.constants.ts";
 import Paginator from "@components/paginator/Paginator.tsx";
 import ApiResult from "@components/searchPage/components/apiResults/apiResult/ApiResult.tsx";
+import { useTranslations } from "next-intl";
 
 interface Props {
   result: BookSearchResponse | null;
@@ -15,6 +16,8 @@ interface Props {
 
 export default function ApiResults(props: Props) {
   const { result } = props;
+
+  const t = useTranslations("SearchPage");
 
   const totalCount = result == null ? 0 : result.numFound;
 
@@ -24,11 +27,11 @@ export default function ApiResults(props: Props) {
         <table className={"default-table"}>
           <thead>
             <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Year</th>
-              <th>Authors</th>
-              <th>Open library</th>
+              <th>{t("thNumber")}</th>
+              <th>{t("thName")}</th>
+              <th>{t("thYear")}</th>
+              <th>{t("thAuthors")}</th>
+              <th>{t("thOpenLibrary")}</th>
             </tr>
           </thead>
           <tbody>
@@ -50,7 +53,7 @@ export default function ApiResults(props: Props) {
                 {result.books.length === 0 && (
                   <tr>
                     <td colSpan={4} className={"italic"}>
-                      No results found.
+                      {t("noResults")}
                     </td>
                   </tr>
                 )}

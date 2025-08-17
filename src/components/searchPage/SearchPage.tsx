@@ -6,10 +6,13 @@ import Section from "@components/section/Section.tsx";
 import type { BookSearchResponse } from "@api/book/models.ts";
 import { useState } from "react";
 import SelectionState from "@components/searchPage/components/selectionState/SelectionState.tsx";
+import { useTranslations } from "next-intl";
 
 export default function SearchPage() {
   const [response, setResponse] = useState<BookSearchResponse | null>(null);
   const [searchError, setSearchError] = useState<Error | null>(null);
+
+  const t = useTranslations("SearchPage");
 
   const handleSearchUpdate = (result: ApiSearchResult) => {
     switch (result.status) {
@@ -29,18 +32,18 @@ export default function SearchPage() {
 
   return (
     <div className={"flex flex-col gap-4 max-w-[1200px] w-full overflow-auto"}>
-      <Section title={"Search"}>
+      <Section title={t("search")}>
         <ApiSearch onUpdate={handleSearchUpdate} />
       </Section>
       {searchError && (
         <Section
-          title={"Search error"}
+          title={t("searchError")}
           className={"bg-red-100 dark:bg-red-900"}
         >
-          Search failed: {searchError.message}
+          {t("searchFailed")}: {searchError.message}
         </Section>
       )}
-      <Section title={"Results"} overflow={true}>
+      <Section title={t("results")} overflow={true}>
         <ApiResults result={response} />
       </Section>
       <SelectionState />
