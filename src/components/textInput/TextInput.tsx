@@ -1,4 +1,4 @@
-import { type ChangeEventHandler, Component } from "react";
+import { type ChangeEventHandler } from "react";
 import type BaseComponentProps from "../../interfaces/base-component-props.ts";
 import { clsx } from "clsx";
 
@@ -7,22 +7,18 @@ interface TextInputProps extends BaseComponentProps {
   value?: string;
 }
 
-class TextInput extends Component<TextInputProps> {
-  render() {
-    const { value = "", onChange, className, ...rest } = this.props;
+export default function TextInput(props: TextInputProps) {
+  const { value = "", onChange, className, ...rest } = props;
 
-    const baseClassName = "p-2 border rounded";
+  const baseClassName = "p-2 border rounded";
 
-    return (
-      <input
-        type={"text"}
-        className={clsx(baseClassName, className)}
-        value={value}
-        onChange={onChange}
-        {...rest}
-      />
-    );
-  }
+  return (
+    <input
+      type={"text"}
+      className={clsx(baseClassName, className)}
+      value={value}
+      onChange={onChange}
+      {...rest}
+    />
+  );
 }
-
-export default TextInput;

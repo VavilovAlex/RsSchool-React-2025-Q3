@@ -1,0 +1,39 @@
+{
+  "Navbar": {
+    "home": "Home",
+    "about": "About",
+    "invalidateCache": "Invalidate Book Cache",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
+  },
+  "About": {
+    "title": "About",
+    "pageTitle": "About page",
+    "author": "My name is Alex",
+    "rsSchool": "Rs School"
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "reload": "Reload"
+  },
+  "NotFound": {
+    "title": "404 - Page not found"
+  },
+  "SearchPage": {
+    "search": "Search",
+    "searchError": "Search error",
+    "searchFailed": "Search failed",
+    "results": "Results",
+    "thNumber": "#",
+    "thName": "Name",
+    "thYear": "Year",
+    "thAuthors": "Authors",
+    "thOpenLibrary": "Open library",
+    "noResults": "No results found.",
+    "link": "Link"
+  },
+  "Details": {
+    "title": "Details",
+    "close": "Close"
+  }
+}

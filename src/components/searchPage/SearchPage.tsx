@@ -1,0 +1,52 @@
+import ApiSearch, {
+  type ApiSearchResult,
+} from "./components/apiSearch/ApiSearch.tsx";
+import ApiResults from "./components/apiResults/ApiResults.tsx";
+import Section from "@components/section/Section.tsx";
+import type { BookSearchResponse } from "@api/book/models.ts";
+import { useState } from "react";
+import SelectionState from "@components/searchPage/components/selectionState/SelectionState.tsx";
+import { useTranslations } from "next-intl";
+
+export default function SearchPage() {
+  const [response, setResponse] = useState<BookSearchResponse | null>(null);
+  const [searchError, setSearchError] = useState<Error | null>(null);
+
+  const t = useTranslations("SearchPage");
+
+  const handleSearchUpdate = (result: ApiSearchResult) => {
+    switch (result.status) {
+      case "loading":
+        setResponse(null);
+        setSearchError(null);
+        break;
+      case "success":
+        setSearchError(null);
+        setResponse(result.data);
+        break;
+      case "error":
+        setSearchError(result.error);
+        setResponse({ numFound: 0, start: 0, books: [] });
+    }
+  };
+
+  return (
+    <div className={"flex flex-col gap-4 max-w-[1200px] w-full overflow-auto"}>
+      <Section title={t("search")}>
+        <ApiSearch onUpdate={handleSearchUpdate} />
+      </Section>
+      {searchError && (
+        <Section
+          title={t("searchError")}
+          className={"bg-red-100 dark:bg-red-900"}
+        >
+          {t("searchFailed")}: {searchError.message}
+        </Section>
+      )}
+      <Section title={t("results")} overflow={true}>
+        <ApiResults result={response} />
+      </Section>
+      <SelectionState />
+    </div>
+  );
+}

@@ -1,4 +1,4 @@
-import type { QueryParams } from "../../shared/utils/queryParams.ts";
+import type { QueryParams } from "@shared/utils/queryParams.ts";
 
 export interface ApiBookSearchQuery extends QueryParams {
   q: string;
@@ -18,11 +18,23 @@ export interface ApiBookDocument {
   has_fulltext: boolean;
   edition_count: number;
   title: string;
-  author_name: string[];
+  author_name?: string[];
   first_publish_year: number;
   key: string;
   ia: string[];
-  author_key: string[];
+  author_key?: string[];
   public_scan_b: boolean;
   language: string[];
+}
+
+export interface ApiBookDetailsResponse {
+  title: string;
+  key: string;
+  subjects: string[];
+  description: string | ApiBookDetailsDescription;
+}
+
+export interface ApiBookDetailsDescription {
+  type: string;
+  value: string;
 }
