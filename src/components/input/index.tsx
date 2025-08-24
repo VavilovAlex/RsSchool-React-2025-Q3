@@ -1,5 +1,6 @@
-import { type InputHTMLAttributes, useId } from "react";
+import { type InputHTMLAttributes } from "react";
 import { clsx } from "clsx";
+import useIdName from "@/hooks/useIdName.ts";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -7,10 +8,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export default function Input(props: InputProps) {
   const { label, id, name, className, type = "text", ...rest } = props;
-  const generatedId = useId();
 
-  const idValue = id ?? name ?? generatedId;
-  const nameValue = name;
+  const idValue = useIdName(id, name);
 
   const baseClassName = "p-1 border rounded";
 
@@ -19,7 +18,7 @@ export default function Input(props: InputProps) {
       {label && <label htmlFor={idValue}>{label}</label>}
       <input
         id={idValue}
-        name={nameValue}
+        name={name}
         type={type}
         className={clsx(baseClassName, className)}
         {...rest}

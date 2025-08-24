@@ -1,5 +1,6 @@
-import { type SelectHTMLAttributes, useId } from "react";
+import { type SelectHTMLAttributes } from "react";
 import { clsx } from "clsx";
+import useIdName from "@/hooks/useIdName.ts";
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
@@ -7,10 +8,8 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 
 export default function Select(props: SelectProps) {
   const { label, id, name, className, children, ...rest } = props;
-  const generatedId = useId();
 
-  const idValue = id ?? name ?? generatedId;
-  const nameValue = name;
+  const idValue = useIdName(id, name);
 
   const baseClassName = "p-1 border rounded";
 
@@ -19,7 +18,7 @@ export default function Select(props: SelectProps) {
       {label && <label htmlFor={idValue}>{label}</label>}
       <select
         id={idValue}
-        name={nameValue}
+        name={name}
         className={clsx(baseClassName, className)}
         {...rest}
       >
