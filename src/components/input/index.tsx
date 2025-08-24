@@ -11,7 +11,10 @@ export default function Input(props: InputProps) {
 
   const idValue = useIdName(id, name);
 
-  const baseClassName = "p-1 border rounded";
+  const baseClassName =
+    type === "file"
+      ? "p-1 border rounded cursor-pointer file:cursor-pointer file:mr-3 file:py-1 file:px-3 file:rounded file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
+      : "p-1 border rounded";
 
   return (
     <div className="flex flex-col gap-1">

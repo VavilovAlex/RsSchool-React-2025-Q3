@@ -55,4 +55,12 @@ describe("Input", () => {
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue(5);
   });
+
+  it("applies file-specific styles for file inputs", () => {
+    render(<Input type="file" label="Attachment" />);
+    const fileInput = screen.getByLabelText("Attachment");
+    expect(fileInput).toHaveAttribute("type", "file");
+    expect(fileInput).toHaveClass("cursor-pointer");
+    expect(fileInput.className).toContain("file:px-3");
+  });
 });
