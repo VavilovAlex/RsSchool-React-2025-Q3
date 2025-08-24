@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
+    "@tailwindcss/language-server": "^0.14.26",
     "@tailwindcss/vite": "^4.1.11",
     "clsx": "^2.1.1",
     "react": "^19.1.0",
