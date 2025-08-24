@@ -15,10 +15,7 @@ function App() {
         <div className="p-4">
           <div className="mb-2 text-lg font-semibold">Test Modal</div>
           <div>
-            <UncontrolledForm />
-          </div>
-          <div className="flex justify-end gap-2">
-            <Button onClick={() => setIsModalOpen(false)}>Close</Button>
+            <UncontrolledForm onCancel={() => setIsModalOpen(false)} />
           </div>
         </div>
       </Modal>
