@@ -11,17 +11,25 @@ export const formDataSchema = z
     password: z.string().min(1, "Password is required"),
     repeatPassword: z.string().min(1, "Repeat Password is required"),
     gender: z.string().min(1, "Gender is required"),
-    attachment: z
-      .instanceof(File)
-      .refine((f) => f.size > 0, "Attachment is required")
-      .refine(
-        (f) => ["image/png", "image/jpeg"].includes(f.type),
-        "Attachment must be PNG or JPEG",
-      )
-      .refine(
-        (f) => f.size < 10 * 1024 * 1024,
-        "Attachment must be below 10MB",
-      ),
+    attachment: z.preprocess(
+      (v) => {
+        if (v instanceof FileList) {
+          return v.item(0) ?? new File([""], "", { type: "" });
+        }
+        return v;
+      },
+      z
+        .instanceof(File)
+        .refine((f) => f.size > 0, "Attachment is required")
+        .refine(
+          (f) => ["image/png", "image/jpeg"].includes(f.type),
+          "Attachment must be PNG or JPEG",
+        )
+        .refine(
+          (f) => f.size < 10 * 1024 * 1024,
+          "Attachment must be below 10MB",
+        ),
+    ),
     country: z.string().min(1, "Country is required"),
     terms: z.preprocess(
       (v) => v === "on" || v === "true" || v === "1" || v === true || v === 1,
@@ -34,6 +42,8 @@ export const formDataSchema = z
   });
 
 export type FormData = z.infer<typeof formDataSchema>;
+export type FormDataIn = z.input<typeof formDataSchema>;
+export type FormDataOut = z.output<typeof formDataSchema>;
 
 export const readFormData = (
   form: HTMLFormElement,

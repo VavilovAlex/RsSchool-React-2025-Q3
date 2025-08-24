@@ -35,12 +35,12 @@ export default function Input(props: InputProps<HTMLInputElement>) {
           errorText && "border-red-600",
           className,
         )}
+        {...rest}
         {...(register
           ? register(name)
           : {
               name: name,
             })}
-        {...rest}
       />
       {errorText && (
         <p id={errorId} className="text-red-600 text-sm">

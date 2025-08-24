@@ -23,12 +23,12 @@ export default function Select(props: InputProps<HTMLSelectElement>) {
           errorText && "border-red-600",
           className,
         )}
+        {...rest}
         {...(register
           ? register(name)
           : {
               name: name,
             })}
-        {...rest}
       >
         {children}
       </select>

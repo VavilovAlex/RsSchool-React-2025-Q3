@@ -1,80 +1,75 @@
-import { type FormEvent, useRef, useState } from "react";
 import Input from "@components/input";
 import Select from "@components/select";
 import Checkbox from "@components/checkbox";
 import { useAppSelector } from "@/hooks/redux.ts";
 import Button from "@components/button";
-import { readFormData } from "@components/forms/formData.ts";
-import getErrors, { type Errors } from "@/utils/getErrors.ts";
+import {
+  type FormData,
+  type FormDataIn,
+  type FormDataOut,
+  formDataSchema,
+} from "@components/forms/formData.ts";
 import PasswordStrength from "@components/passwordStrength";
 import getPasswordStrength from "@/utils/getPasswordStrength.ts";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-export default function UncontrolledForm({
-  onCancel,
-}: {
-  onCancel: () => void;
-}) {
+export default function ControlledForm({ onCancel }: { onCancel: () => void }) {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid },
+  } = useForm<FormDataIn, unknown, FormDataOut>({
+    resolver: zodResolver(formDataSchema),
+    mode: "onChange",
+  });
+
   const countries = useAppSelector((state) => state.countries);
-  const formRef = useRef<HTMLFormElement>(null);
-  const [errors, setErrors] = useState<Errors>({});
-  const [password, setPassword] = useState("");
+  const password = watch("password", "");
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    const form = e.currentTarget;
-    const parsed = readFormData(form);
-
-    if (!parsed.success) {
-      setErrors(getErrors(parsed));
-      return;
-    }
-    setErrors({});
-    form.reset();
-  }
-
-  function errorFor(name: string) {
-    return errors[name];
-  }
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    console.log("Submitting form");
+    console.log(data);
+  };
 
   return (
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit}
-      noValidate
-      className="flex flex-col gap-3"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
       <div className="flex flex-col gap-2">
         <Input
           label="Name"
           name="name"
           type="text"
+          autoComplete="name"
           autoFocus
-          errorText={errorFor("name")}
+          register={register}
+          errorText={errors.name?.message}
         />
 
         <Input
           label="Age"
           name="age"
           type="number"
-          errorText={errorFor("age")}
+          register={register}
+          errorText={errors.age?.message}
         />
 
         <Input
           label="Email"
           name="email"
           type="email"
-          errorText={errorFor("email")}
+          autoComplete="email"
+          register={register}
+          errorText={errors.email?.message}
         />
 
         <Input
           label="Password"
           name="password"
           type="password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          errorText={errorFor("password")}
+          autoComplete="new-password"
+          register={register}
+          errorText={errors.password?.message}
         />
         <PasswordStrength score={getPasswordStrength(password)} maxScore={4} />
 
@@ -82,10 +77,17 @@ export default function UncontrolledForm({
           label="Repeat Password"
           name="repeatPassword"
           type="password"
-          errorText={errorFor("repeatPassword")}
+          autoComplete="new-password"
+          register={register}
+          errorText={errors.repeatPassword?.message}
         />
 
-        <Select label="Gender" name="gender" errorText={errorFor("gender")}>
+        <Select
+          label="Gender"
+          name="gender"
+          register={register}
+          errorText={errors.gender?.message}
+        >
           <option value="">Select gender</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
@@ -98,7 +100,8 @@ export default function UncontrolledForm({
           name="attachment"
           type="file"
           accept="image/png,image/jpeg"
-          errorText={errorFor("attachment")}
+          register={register}
+          errorText={errors.attachment?.message}
         />
 
         <Input
@@ -106,7 +109,8 @@ export default function UncontrolledForm({
           name="country"
           autoComplete="country"
           list="countries"
-          errorText={errorFor("country")}
+          register={register}
+          errorText={errors.country?.message}
         />
 
         <datalist id="countries">
@@ -121,13 +125,16 @@ export default function UncontrolledForm({
         <div>
           <Checkbox
             label="I agree to the terms and conditions"
-            name="terms"
-            errorText={errorFor("terms")}
+            name={"terms"}
+            register={register}
+            errorText={errors.terms?.message}
           />
         </div>
 
         <div className={"flex justify-between"}>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={!isValid}>
+            Submit
+          </Button>
           <Button type="button" onClick={onCancel}>
             Cancel
           </Button>

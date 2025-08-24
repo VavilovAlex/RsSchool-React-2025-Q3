@@ -23,12 +23,12 @@ export default function Checkbox(props: InputProps<HTMLInputElement>) {
             errorText && "border-red-600",
             className,
           )}
+          {...rest}
           {...(register
             ? register(name)
             : {
                 name: name,
               })}
-          {...rest}
         />
         {label && <label htmlFor={idValue}>{label}</label>}
       </div>

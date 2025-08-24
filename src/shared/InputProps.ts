@@ -1,5 +1,6 @@
-import type { FieldValues, UseFormRegister } from "react-hook-form";
+import type { Path, UseFormRegister } from "react-hook-form";
 import type { InputHTMLAttributes } from "react";
+import { type FormDataIn } from "@components/forms/formData.ts";
 
 interface BaseProps<T> extends InputHTMLAttributes<T> {
   label?: string;
@@ -7,8 +8,8 @@ interface BaseProps<T> extends InputHTMLAttributes<T> {
 }
 
 interface WithRegister<T> extends BaseProps<T> {
-  register: UseFormRegister<FieldValues>;
-  name: string;
+  register: UseFormRegister<FormDataIn>;
+  name: Path<FormDataIn>;
 }
 
 interface WithoutRegister<T> extends BaseProps<T> {
