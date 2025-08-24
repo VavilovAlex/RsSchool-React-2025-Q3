@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Modal from "@components/modal";
 import Button from "@components/button";
+import UncontrolledForm from "@components/forms/uncontrolled";
 
 function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,6 +14,9 @@ function App() {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="p-4">
           <div className="mb-2 text-lg font-semibold">Test Modal</div>
+          <div>
+            <UncontrolledForm />
+          </div>
           <div className="flex justify-end gap-2">
             <Button onClick={() => setIsModalOpen(false)}>Close</Button>
           </div>
