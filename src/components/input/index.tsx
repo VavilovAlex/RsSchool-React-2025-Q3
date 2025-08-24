@@ -4,12 +4,22 @@ import useIdName from "@/hooks/useIdName.ts";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  errorText?: string;
 }
 
 export default function Input(props: InputProps) {
-  const { label, id, name, className, type = "text", ...rest } = props;
+  const {
+    label,
+    id,
+    name,
+    className,
+    type = "text",
+    errorText,
+    ...rest
+  } = props;
 
   const idValue = useIdName(id, name);
+  const errorId = `${idValue}-error`;
 
   const baseClassName =
     type === "file"
@@ -23,9 +33,20 @@ export default function Input(props: InputProps) {
         id={idValue}
         name={name}
         type={type}
-        className={clsx(baseClassName, className)}
+        aria-invalid={!!errorText}
+        aria-describedby={errorText ? errorId : undefined}
+        className={clsx(
+          baseClassName,
+          errorText && "border-red-600",
+          className,
+        )}
         {...rest}
       />
+      {errorText && (
+        <p id={errorId} className="text-red-600 text-sm">
+          {errorText}
+        </p>
+      )}
     </div>
   );
 }
