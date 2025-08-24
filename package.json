@@ -15,9 +15,10 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist -b gh-pages",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@tailwindcss/language-server": "^0.14.26",
     "@tailwindcss/vite": "^4.1.11",
     "clsx": "^2.1.1",
     "react": "^19.1.0",
