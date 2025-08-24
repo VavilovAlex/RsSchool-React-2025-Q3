@@ -5,6 +5,7 @@ import { type FormDataIn } from "@components/forms/formData.ts";
 interface BaseProps<T> extends InputHTMLAttributes<T> {
   label?: string;
   errorText?: string;
+  hideErrorMessage?: boolean;
 }
 
 interface WithRegister<T> extends BaseProps<T> {

@@ -7,7 +7,6 @@ import Button from "@components/button";
 import { readFormData } from "@components/forms/formData.ts";
 import getErrors, { type Errors } from "@/utils/getErrors.ts";
 import PasswordStrength from "@components/passwordStrength";
-import getPasswordStrength from "@/utils/getPasswordStrength.ts";
 
 export default function UncontrolledForm({
   onCancel,
@@ -75,8 +74,9 @@ export default function UncontrolledForm({
             setPassword(e.target.value);
           }}
           errorText={errorFor("password")}
+          hideErrorMessage={true}
         />
-        <PasswordStrength score={getPasswordStrength(password)} maxScore={4} />
+        <PasswordStrength password={password} />
 
         <Input
           label="Repeat Password"

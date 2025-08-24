@@ -10,7 +10,9 @@ export default function Input(props: InputProps<HTMLInputElement>) {
     className,
     type = "text",
     errorText,
+    hideErrorMessage,
     register,
+    children,
     ...rest
   } = props;
 
@@ -23,7 +25,7 @@ export default function Input(props: InputProps<HTMLInputElement>) {
       : "p-1 border rounded";
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 relative mb-[1.2rem]">
       {label && <label htmlFor={idValue}>{label}</label>}
       <input
         id={idValue}
@@ -42,11 +44,15 @@ export default function Input(props: InputProps<HTMLInputElement>) {
               name: name,
             })}
       />
-      {errorText && (
-        <p id={errorId} className="text-red-600 text-sm">
+      {!hideErrorMessage && errorText && (
+        <p
+          id={errorId}
+          className="text-red-600 text-sm absolute bottom-[-1.2rem]"
+        >
           {errorText}
         </p>
       )}
+      {children}
     </div>
   );
 }

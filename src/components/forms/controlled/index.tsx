@@ -10,7 +10,6 @@ import {
   formDataSchema,
 } from "@components/forms/formData.ts";
 import PasswordStrength from "@components/passwordStrength";
-import getPasswordStrength from "@/utils/getPasswordStrength.ts";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -35,7 +34,7 @@ export default function ControlledForm({ onCancel }: { onCancel: () => void }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <Input
           label="Name"
           name="name"
@@ -70,8 +69,10 @@ export default function ControlledForm({ onCancel }: { onCancel: () => void }) {
           autoComplete="new-password"
           register={register}
           errorText={errors.password?.message}
-        />
-        <PasswordStrength score={getPasswordStrength(password)} maxScore={4} />
+          hideErrorMessage={true}
+        >
+          <PasswordStrength password={password} />
+        </Input>
 
         <Input
           label="Repeat Password"

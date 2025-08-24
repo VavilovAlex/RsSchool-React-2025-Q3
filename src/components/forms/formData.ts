@@ -1,4 +1,5 @@
 import { z, type ZodSafeParseResult } from "zod";
+import getPasswordStrength from "@/utils/getPasswordStrength.ts";
 
 export const formDataSchema = z
   .object({
@@ -8,7 +9,13 @@ export const formDataSchema = z
       .regex(/^[A-Z].*/, "Name must start with a capital letter"),
     age: z.coerce.number().positive("Age must be a positive number"),
     email: z.email("Invalid email").min(1, "Email is required"),
-    password: z.string().min(1, "Password is required"),
+    password: z
+      .string()
+      .min(1, "Password is required")
+      .refine((p) => {
+        const { score, maxScore } = getPasswordStrength(p);
+        return score >= maxScore;
+      }, "Password is not strong enough"),
     repeatPassword: z.string().min(1, "Repeat Password is required"),
     gender: z.string().min(1, "Gender is required"),
     attachment: z.preprocess(

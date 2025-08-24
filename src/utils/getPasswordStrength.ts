@@ -5,11 +5,23 @@ export default function getPasswordStrength(password: string) {
   const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
   let score = 0;
+  const reasons = [];
 
   if (hasLowercase) score++;
-  if (hasUppercase) score++;
-  if (hasNumber) score++;
-  if (hasSpecialCharacter) score++;
+  else reasons.push("Must contain at least one lowercase letter");
 
-  return score;
+  if (hasUppercase) score++;
+  else reasons.push("Must contain at least one uppercase letter");
+
+  if (hasNumber) score++;
+  else reasons.push("Must contain at least one number");
+
+  if (hasSpecialCharacter) score++;
+  else reasons.push("Must contain at least one special character");
+
+  return {
+    score,
+    maxScore: 4,
+    reasons: reasons,
+  };
 }

@@ -1,10 +1,10 @@
-export default function PasswordStrength({
-  score,
-  maxScore,
-}: {
-  score: number;
-  maxScore: number;
-}) {
+import getPasswordStrength from "@/utils/getPasswordStrength.ts";
+
+export default function PasswordStrength({ password }: { password: string }) {
+  const { score, maxScore, reasons } = getPasswordStrength(password);
+
+  const reason = reasons.length > 0 ? reasons[0] : null;
+
   const percentage = (score / maxScore) * 100;
 
   let color = "bg-green-500";
@@ -15,7 +15,8 @@ export default function PasswordStrength({
   else color = "bg-green-500";
 
   return (
-    <div className="flex gap-1 items-center">
+    <div className="flex gap-1 items-center justify-end absolute bottom-[-1.2rem] right-0 ">
+      {reason && <div className="text-xs text-red-600 mr-1">{reason}</div>}
       {Array.from({ length: maxScore }, (_, index) => (
         <div
           key={index}
