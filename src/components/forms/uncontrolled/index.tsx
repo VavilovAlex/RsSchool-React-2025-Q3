@@ -100,19 +100,22 @@ export default function UncontrolledForm({
           errorText={errorFor("attachment")}
         />
 
-        <Select
+        <Input
           label="Country"
           name="country"
           autoComplete="country"
+          list="countries"
           errorText={errorFor("country")}
-        >
+        />
+
+        <datalist id="countries">
           <option value="">Select country</option>
           {countries.map((country) => (
-            <option key={country.value} value={country.value}>
-              {country.label}
+            <option key={country.label} value={country.label}>
+              {country.value}
             </option>
           ))}
-        </Select>
+        </datalist>
 
         <div>
           <Checkbox
