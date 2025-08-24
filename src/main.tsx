@@ -5,8 +5,16 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { store } from "./store";
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-createRoot(document.getElementById("root")!).render(
+const root = document.getElementById("root");
+
+if (root == null) {
+  const message = "Root element not found by '#root'";
+
+  console.error(message);
+  throw new Error(message);
+}
+
+createRoot(root).render(
   <StrictMode>
     <Provider store={store}>
       <App />
