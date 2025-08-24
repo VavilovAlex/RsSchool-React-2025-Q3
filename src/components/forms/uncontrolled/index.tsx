@@ -19,7 +19,7 @@ export default function UncontrolledForm() {
         <option value="other">Other</option>
         <option value="prefer-not-to-say">Prefer not to say</option>
       </Select>
-      <Checkbox label="I agree to the terms and conditions" name="terms" />
+      <Input label="Attachment" name="attachment" type="file" />
       <Select label="Country" name="country" autoComplete="country">
         {countries.map((country) => (
           <option key={country.value} value={country.value}>
@@ -27,6 +27,7 @@ export default function UncontrolledForm() {
           </option>
         ))}
       </Select>
+      <Checkbox label="I agree to the terms and conditions" name="terms" />
     </div>
   );
 }
