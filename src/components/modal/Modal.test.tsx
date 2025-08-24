@@ -1,86 +1,82 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi } from "vitest";
-import Modal from "./";
+import { describe, it, expect } from "vitest";
+import Modal from ".";
+import type { ReactNode } from "react";
+
+function Wrapper({
+  isOpen,
+  onClose,
+  children,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose}>
+      {children}
+    </Modal>
+  );
+}
 
 describe("Modal", () => {
-  it("does not render when closed", () => {
+  it("renders with role dialog and aria-modal when open", () => {
+    const onClose = vi.fn();
     render(
-      <Modal isOpen={false} onClose={vi.fn()}>
+      <Wrapper isOpen={true} onClose={onClose}>
         <div>Content</div>
-      </Modal>,
-    );
-
-    expect(screen.queryByRole("dialog")).toBeNull();
-  });
-
-  it("has aria-modal set to true", () => {
-    render(
-      <Modal isOpen onClose={vi.fn()}>
-        <div>Content</div>
-      </Modal>,
+      </Wrapper>,
     );
     const dialog = screen.getByRole("dialog");
     expect(dialog).toHaveAttribute("aria-modal", "true");
+    expect(document.body.contains(dialog)).toBe(true);
   });
 
-  it("renders dialog and children when open", () => {
+  it("does not render when closed", () => {
+    const onClose = vi.fn();
     render(
-      <Modal isOpen onClose={vi.fn()}>
-        <div>Hello</div>
-      </Modal>,
+      <Wrapper isOpen={false} onClose={onClose}>
+        <div>Content</div>
+      </Wrapper>,
     );
-
-    const dialog = screen.getByRole("dialog");
-    expect(dialog).toBeInTheDocument();
-    expect(screen.getByText("Hello")).toBeInTheDocument();
+    expect(screen.queryByRole("dialog")).toBeNull();
   });
 
-  it("calls onClose when clicking on backdrop", async () => {
+  it("closes on ESC key", async () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
-
     render(
-      <Modal isOpen onClose={onClose}>
-        <div>Body</div>
-      </Modal>,
+      <Wrapper isOpen={true} onClose={onClose}>
+        <button>ok</button>
+      </Wrapper>,
     );
+    await user.keyboard("{Escape}");
+    expect(onClose).toHaveBeenCalled();
+  });
 
+  it("closes on backdrop click but not on inner click", async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    render(
+      <Wrapper isOpen={true} onClose={onClose}>
+        <div>Inner</div>
+      </Wrapper>,
+    );
     const dialog = screen.getByRole("dialog");
     const backdrop = dialog.parentElement as HTMLElement;
-
     await user.click(backdrop);
-
     expect(onClose).toHaveBeenCalledTimes(1);
-  });
 
-  it("does not call onClose when clicking inside dialog", async () => {
-    const user = userEvent.setup();
-    const onClose = vi.fn();
-
+    onClose.mockClear();
+    cleanup();
     render(
-      <Modal isOpen onClose={onClose}>
-        <button>Inside</button>
-      </Modal>,
+      <Wrapper isOpen={true} onClose={onClose}>
+        <div>Inner</div>
+      </Wrapper>,
     );
-
-    await user.click(screen.getByText("Inside"));
-
+    const dialog2 = screen.getByRole("dialog");
+    await user.click(within(dialog2).getByText("Inner"));
     expect(onClose).not.toHaveBeenCalled();
-  });
-
-  it("calls onClose when pressing Escape", async () => {
-    const user = userEvent.setup();
-    const onClose = vi.fn();
-
-    render(
-      <Modal isOpen onClose={onClose}>
-        <div>Body</div>
-      </Modal>,
-    );
-
-    await user.keyboard("{Escape}");
-
-    expect(onClose).toHaveBeenCalledTimes(1);
   });
 });

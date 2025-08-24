@@ -60,8 +60,10 @@ export const readFormData = (
 
 function getFormValues(form: HTMLFormElement) {
   const fd = new FormData(form);
-  const file =
-    (fd.get("attachment") as File) || new File([""], "", { type: "" });
+  const input = form.querySelector(
+    'input[name="attachment"]',
+  ) as HTMLInputElement | null;
+  const file = input?.files?.item(0) ?? new File([""], "", { type: "" });
   return {
     name: String(fd.get("name") ?? ""),
     age: fd.get("age") as unknown as string,
