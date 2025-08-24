@@ -1,8 +1,19 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import countriesSlice from "@components/forms/countriesSlice.ts";
 
-export const store = configureStore({
-  reducer: {},
+const rootReducer = combineReducers({
+  countries: countriesSlice,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
+export function setupStore(preloadedState?: Partial<RootState>) {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+  });
+}
+
+export const store = setupStore();
+
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppStoreType = typeof store;
 export type AppDispatch = typeof store.dispatch;
