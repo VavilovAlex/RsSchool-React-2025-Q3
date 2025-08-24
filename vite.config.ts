@@ -24,7 +24,7 @@ export default defineConfig({
     environment: "jsdom",
     coverage: {
       provider: "v8",
-      reporter: ["text", "json", "html"],
+      reporter: ["text", "json"],
       include: ["src/**/*.{js,jsx,ts,tsx}"],
       exclude: [
         "src/**/*.test.{js,jsx,ts,tsx}",
