@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import countriesSlice from "@components/forms/countriesSlice.ts";
+import submissionsSlice from "@components/forms/submissionsSlice.ts";
 
 const rootReducer = combineReducers({
   countries: countriesSlice,
+  submissions: submissionsSlice,
 });
 
 export function setupStore(preloadedState?: Partial<RootState>) {

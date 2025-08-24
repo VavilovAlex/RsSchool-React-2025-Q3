@@ -1,7 +1,7 @@
 import Input from "@components/input";
 import Select from "@components/select";
 import Checkbox from "@components/checkbox";
-import { useAppSelector } from "@/hooks/redux.ts";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.ts";
 import Button from "@components/button";
 import {
   type FormData,
@@ -12,12 +12,16 @@ import {
 import PasswordStrength from "@components/passwordStrength";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import fileToBase64 from "@/utils/fileToBase64.ts";
+import { addSubmission } from "@components/forms/submissionsSlice.ts";
+import { useEffect } from "react";
 
 export default function ControlledForm({ onCancel }: { onCancel: () => void }) {
   const {
     register,
     handleSubmit,
     watch,
+    trigger,
     formState: { errors, isValid },
   } = useForm<FormDataIn, unknown, FormDataOut>({
     resolver: zodResolver(formDataSchema),
@@ -25,12 +29,31 @@ export default function ControlledForm({ onCancel }: { onCancel: () => void }) {
   });
 
   const countries = useAppSelector((state) => state.countries);
+  const dispatch = useAppDispatch();
   const password = watch("password", "");
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log("Submitting form");
-    console.log(data);
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const base64 = await fileToBase64(data.attachment);
+    dispatch(
+      addSubmission({
+        name: data.name,
+        age: data.age,
+        email: data.email,
+        password: data.password,
+        repeatPassword: data.repeatPassword,
+        gender: data.gender,
+        attachment: base64,
+        country: data.country,
+        terms: true,
+      }),
+    );
+    onCancel();
   };
+
+  useEffect(() => {
+    if (password.length === 0) return;
+    void trigger("repeatPassword");
+  }, [password, trigger]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">

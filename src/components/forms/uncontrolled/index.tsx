@@ -2,11 +2,13 @@ import { type FormEvent, useRef, useState } from "react";
 import Input from "@components/input";
 import Select from "@components/select";
 import Checkbox from "@components/checkbox";
-import { useAppSelector } from "@/hooks/redux.ts";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.ts";
 import Button from "@components/button";
 import { readFormData } from "@components/forms/formData.ts";
 import getErrors, { type Errors } from "@/utils/getErrors.ts";
 import PasswordStrength from "@components/passwordStrength";
+import fileToBase64 from "@/utils/fileToBase64.ts";
+import { addSubmission } from "@components/forms/submissionsSlice.ts";
 
 export default function UncontrolledForm({
   onCancel,
@@ -14,11 +16,12 @@ export default function UncontrolledForm({
   onCancel: () => void;
 }) {
   const countries = useAppSelector((state) => state.countries);
+  const dispatch = useAppDispatch();
   const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [password, setPassword] = useState("");
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const form = e.currentTarget;
@@ -29,7 +32,25 @@ export default function UncontrolledForm({
       return;
     }
     setErrors({});
+
+    const d = parsed.data;
+    const base64 = await fileToBase64(d.attachment);
+    dispatch(
+      addSubmission({
+        name: d.name,
+        age: d.age,
+        email: d.email,
+        password: d.password,
+        repeatPassword: d.repeatPassword,
+        gender: d.gender,
+        attachment: base64,
+        country: d.country,
+        terms: true,
+      }),
+    );
+
     form.reset();
+    onCancel();
   }
 
   function errorFor(name: string) {
@@ -75,8 +96,9 @@ export default function UncontrolledForm({
           }}
           errorText={errorFor("password")}
           hideErrorMessage={true}
-        />
-        <PasswordStrength password={password} />
+        >
+          <PasswordStrength password={password} />
+        </Input>
 
         <Input
           label="Repeat Password"
