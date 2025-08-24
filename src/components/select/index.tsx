@@ -14,7 +14,7 @@ export default function Select(props: SelectProps) {
   const baseClassName = "p-1 border rounded";
 
   return (
-    <>
+    <div className="flex flex-col gap-1">
       {label && <label htmlFor={idValue}>{label}</label>}
       <select
         id={idValue}
@@ -24,6 +24,6 @@ export default function Select(props: SelectProps) {
       >
         {children}
       </select>
-    </>
+    </div>
   );
 }

@@ -14,7 +14,7 @@ export default function Input(props: InputProps) {
   const baseClassName = "p-1 border rounded";
 
   return (
-    <>
+    <div className="flex flex-col gap-1">
       {label && <label htmlFor={idValue}>{label}</label>}
       <input
         id={idValue}
@@ -23,6 +23,6 @@ export default function Input(props: InputProps) {
         className={clsx(baseClassName, className)}
         {...rest}
       />
-    </>
+    </div>
   );
 }
