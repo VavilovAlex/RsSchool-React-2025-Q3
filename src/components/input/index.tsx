@@ -1,13 +1,8 @@
-import { type InputHTMLAttributes } from "react";
 import { clsx } from "clsx";
 import useIdName from "@/hooks/useIdName.ts";
+import type { InputProps } from "@shared/InputProps.ts";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  errorText?: string;
-}
-
-export default function Input(props: InputProps) {
+export default function Input(props: InputProps<HTMLInputElement>) {
   const {
     label,
     id,
@@ -15,6 +10,7 @@ export default function Input(props: InputProps) {
     className,
     type = "text",
     errorText,
+    register,
     ...rest
   } = props;
 
@@ -31,7 +27,6 @@ export default function Input(props: InputProps) {
       {label && <label htmlFor={idValue}>{label}</label>}
       <input
         id={idValue}
-        name={name}
         type={type}
         aria-invalid={!!errorText}
         aria-describedby={errorText ? errorId : undefined}
@@ -40,6 +35,11 @@ export default function Input(props: InputProps) {
           errorText && "border-red-600",
           className,
         )}
+        {...(register
+          ? register(name)
+          : {
+              name: name,
+            })}
         {...rest}
       />
       {errorText && (

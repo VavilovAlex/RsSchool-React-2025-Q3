@@ -1,14 +1,9 @@
-import { type InputHTMLAttributes } from "react";
 import { clsx } from "clsx";
 import useIdName from "@/hooks/useIdName.ts";
+import type { InputProps } from "@shared/InputProps.ts";
 
-interface CheckboxProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  errorText?: string;
-}
-
-export default function Checkbox(props: CheckboxProps) {
-  const { label, id, name, className, errorText, ...rest } = props;
+export default function Checkbox(props: InputProps<HTMLInputElement>) {
+  const { label, id, name, className, errorText, register, ...rest } = props;
 
   const idValue = useIdName(id, name);
   const errorId = `${idValue}-error`;
@@ -20,7 +15,6 @@ export default function Checkbox(props: CheckboxProps) {
       <div className="flex items-center gap-2">
         <input
           id={idValue}
-          name={name}
           type="checkbox"
           aria-invalid={!!errorText}
           aria-describedby={errorText ? errorId : undefined}
@@ -29,6 +23,11 @@ export default function Checkbox(props: CheckboxProps) {
             errorText && "border-red-600",
             className,
           )}
+          {...(register
+            ? register(name)
+            : {
+                name: name,
+              })}
           {...rest}
         />
         {label && <label htmlFor={idValue}>{label}</label>}

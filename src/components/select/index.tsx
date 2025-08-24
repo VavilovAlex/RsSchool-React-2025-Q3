@@ -1,14 +1,10 @@
-import { type SelectHTMLAttributes } from "react";
 import { clsx } from "clsx";
 import useIdName from "@/hooks/useIdName.ts";
+import type { InputProps } from "@shared/InputProps.ts";
 
-interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  label?: string;
-  errorText?: string;
-}
-
-export default function Select(props: SelectProps) {
-  const { label, id, name, className, children, errorText, ...rest } = props;
+export default function Select(props: InputProps<HTMLSelectElement>) {
+  const { label, id, name, className, children, errorText, register, ...rest } =
+    props;
 
   const idValue = useIdName(id, name);
   const errorId = `${idValue}-error`;
@@ -20,7 +16,6 @@ export default function Select(props: SelectProps) {
       {label && <label htmlFor={idValue}>{label}</label>}
       <select
         id={idValue}
-        name={name}
         aria-invalid={!!errorText}
         aria-describedby={errorText ? errorId : undefined}
         className={clsx(
@@ -28,6 +23,11 @@ export default function Select(props: SelectProps) {
           errorText && "border-red-600",
           className,
         )}
+        {...(register
+          ? register(name)
+          : {
+              name: name,
+            })}
         {...rest}
       >
         {children}
