@@ -6,6 +6,8 @@ import { useAppSelector } from "@/hooks/redux.ts";
 import Button from "@components/button";
 import { readFormData } from "@components/forms/formData.ts";
 import getErrors, { type Errors } from "@/utils/getErrors.ts";
+import PasswordStrength from "@components/passwordStrength";
+import getPasswordStrength from "@/utils/getPasswordStrength.ts";
 
 export default function UncontrolledForm({
   onCancel,
@@ -15,6 +17,7 @@ export default function UncontrolledForm({
   const countries = useAppSelector((state) => state.countries);
   const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<Errors>({});
+  const [password, setPassword] = useState("");
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -67,8 +70,12 @@ export default function UncontrolledForm({
           label="Password"
           name="password"
           type="password"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
           errorText={errorFor("password")}
         />
+        <PasswordStrength score={getPasswordStrength(password)} maxScore={4} />
 
         <Input
           label="Repeat Password"
