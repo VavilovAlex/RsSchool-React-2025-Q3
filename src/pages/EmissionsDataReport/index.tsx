@@ -10,7 +10,7 @@ export default function EmissionsDataReport() {
   const dataPromise = useLocal ? fetchLocal() : fetchRemote();
 
   return (
-    <div className={"flex flex-col max-h-screen overflow-auto"}>
+    <div className={"flex flex-col h-screen overflow-auto"}>
       <Checkbox
         label="Use local data"
         checked={useLocal}
