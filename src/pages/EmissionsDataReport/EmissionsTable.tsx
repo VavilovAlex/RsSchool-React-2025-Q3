@@ -8,6 +8,8 @@ import Input from "@components/input";
 import Select from "@components/select";
 import { isoCodesByRegion } from "@shared/iso_codes_by_region.ts";
 import { DataRow } from "@pages/EmissionsDataReport/DataRow.tsx";
+import { ColumnSelectorModal } from "@pages/EmissionsDataReport/ColumnSelectorModal.tsx";
+import Button from "@components/button";
 
 export type DataColumn = keyof Data;
 type CountrySortBy = "name" | "iso_code" | "population";
@@ -27,7 +29,8 @@ export const EmissionsTable = memo(
       null,
     );
 
-    const [visibleColumns] = useState<DataColumn[]>([
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [visibleColumns, setVisibleColumns] = useState<DataColumn[]>([
       "year",
       "population",
       "co2",
@@ -204,33 +207,49 @@ export const EmissionsTable = memo(
         </ContentCard>
         {selectedCountry && (
           <ContentCard title={selectedCountry.name}>
-            <table className={"default-table"}>
-              <thead className={"cursor-pointer"}>
-                <tr>
-                  {visibleColumns.map((col) => (
-                    <SortableColumn
-                      key={col}
-                      sortKey={col}
-                      onSort={setSortDataBy}
-                      activeSort={sortDataBy}
-                    >
-                      {col}
-                    </SortableColumn>
+            <div className={"flex mb-2"}>
+              <Button onClick={() => setIsModalOpen(true)}>
+                Configure Columns
+              </Button>
+            </div>
+            <div className={"flex-1 min-h-0 overflow-auto"}>
+              <table className={"default-table"}>
+                <thead className={"cursor-pointer"}>
+                  <tr>
+                    {visibleColumns.map((col) => (
+                      <SortableColumn
+                        key={col}
+                        sortKey={col}
+                        onSort={setSortDataBy}
+                        activeSort={sortDataBy}
+                      >
+                        {col}
+                      </SortableColumn>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedCountryData.map((d) => (
+                    <DataRow
+                      key={d.year}
+                      data={d}
+                      visibleColumns={visibleColumns}
+                    />
                   ))}
-                </tr>
-              </thead>
-              <tbody>
-                {selectedCountryData.map((d) => (
-                  <DataRow
-                    key={d.year}
-                    data={d}
-                    visibleColumns={visibleColumns}
-                  />
-                ))}
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </ContentCard>
         )}
+
+        <ColumnSelectorModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          selectedColumns={visibleColumns}
+          selectedColumnsChanged={(newColumns) => {
+            setVisibleColumns(newColumns);
+          }}
+        />
       </div>
     );
   },
