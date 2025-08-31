@@ -1,69 +1,53 @@
-# React + TypeScript + Vite
+# Performance Profiling
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Before Optimization
 
-Currently, two official plugins are available:
+### Initial Render Performance
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Commit time**: 1.4s
+- **Render time**: 61.5ms
+  ![img_1.png](readme_img/img_1.png)
 
-## Expanding the ESLint configuration
+### Sorting Performance (Population Column)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Commit time**: 1.0s
+- **Render duration**: 67ms
+- **Trigger**: User clicking column header
+  ![img_2.png](readme_img/img_2.png)
+  ![img_3.png](readme_img/img_3.png)
 
-```js
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
+### Country Details Performance
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- **Commit time**: 1.2s
+- **Render duration**: 93ms
+- **Trigger**: User clicking row
+  ![img_5.png](readme_img/img_5.png)
+  ![img_4.png](readme_img/img_4.png)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+### Filtering Performance (Region Filter)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **Commit time**: 1.3s
+- **Render duration**: 24.2ms
+- **Trigger**: Changing region filter
+  ![img_6.png](readme_img/img_6.png)
+  ![img_7.png](readme_img/img_7.png)
 
-```js
-// eslint.config.js
-import reactX from "eslint-plugin-react-x";
-import reactDom from "eslint-plugin-react-dom";
+### Year Filter Performance
 
-export default tseslint.config([
-  globalIgnores(["dist"]),
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs["recommended-typescript"],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
-```
+- **Commit time**: 1.0s
+- **Render duration**: 56.3ms
+- **Trigger**: Changing year filter
+  ![img_9.png](readme_img/img_9.png)
+  ![img_8.png](readme_img/img_8.png)
+
+### Country Search Performance
+
+- **Commit time**: 1.4s
+- **Render duration**: 30.7ms
+- **Trigger**: New input in search field
+  ![img_10.png](readme_img/img_10.png)
+  ![img_11.png](readme_img/img_11.png)
+
+---
+
+## After Optimization
