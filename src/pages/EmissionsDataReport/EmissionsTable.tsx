@@ -1,7 +1,7 @@
 import type { Country, Data } from "@/types/emissionTypes.ts";
 import { use, useState } from "react";
 import ContentCard from "@components/contentCard";
-import { sortCompare } from "@/utils/comapre.ts";
+import { sortCompare } from "@/utils/compare.ts";
 import SortableColumn from "@components/sortableColumn";
 import type { SortState } from "@components/sortableColumn/sortTypes.ts";
 import Input from "@components/input";
@@ -81,8 +81,6 @@ export const EmissionsTable = ({
       }
       return isoCodesByRegion[regionFilter].includes(c.iso_code ?? "");
     });
-
-  console.log(countriesRaw.map((c) => `${c.iso_code}`).join(";"));
 
   const regions = Object.keys(isoCodesByRegion);
 
